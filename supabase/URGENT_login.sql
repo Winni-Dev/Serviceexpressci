@@ -1,0 +1,2 @@
+-- Fichier remplacé par SETUP_COMPLET.sql
+-- Exécutez : supabase/SETUP_COMPLET.sql

@@ -1,0 +1,208 @@
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { FormSearchableSelect } from '@/components/ui/form-searchable-select';
+import { useCreateRequest } from '@/hooks/useRequests';
+import { useZones } from '@/hooks/useZones';
+import { useConfirm } from '@/contexts/confirm-context';
+import { generateWhatsAppLink } from '@/lib/utils';
+import { getServiceIcon, getServiceDescription } from '@/lib/service-icons';
+import { Loader2, X } from 'lucide-react';
+import type { Service } from '@/types';
+
+const requestSchema = z.object({
+  name: z.string().min(2, 'Le nom est requis'),
+  phone: z.string().min(8, 'Numéro de téléphone invalide'),
+  service_id: z.string().min(1, 'Veuillez choisir un service'),
+  quartier: z.string().min(2, 'La commune est requise'),
+  zone_id: z.string().min(1, 'Veuillez choisir une zone'),
+  description: z.string().min(10, 'Description trop courte'),
+});
+
+type RequestForm = z.infer<typeof requestSchema>;
+
+interface RequestOrderModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  service: Service | null;
+  services?: Service[];
+}
+
+export function RequestOrderModal({ open, onOpenChange, service, services = [] }: RequestOrderModalProps) {
+  const { data: zones } = useZones();
+  const createRequest = useCreateRequest();
+  const { alert } = useConfirm();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<RequestForm>({
+    resolver: zodResolver(requestSchema),
+  });
+
+  useEffect(() => {
+    if (open && service) {
+      setValue('service_id', service.id);
+    } else if (open && !service) {
+      setValue('service_id', '');
+    }
+  }, [open, service, setValue]);
+
+  const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
+  const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
+
+  const onSubmit = async (data: RequestForm) => {
+    try {
+      await createRequest.mutateAsync(data);
+      const serviceName = service?.name ?? services.find((s) => s.id === data.service_id)?.name ?? '';
+      const message = `Bonjour, je souhaite faire une demande de service:\nService: ${serviceName}\nNom: ${data.name}\nTéléphone: ${data.phone}\nCommune: ${data.quartier}\nDescription: ${data.description}`;
+      window.open(generateWhatsAppLink('0123456789', message), '_blank');
+      reset();
+      onOpenChange(false);
+      await alert({
+        title: 'Demande envoyée !',
+        description: 'Votre demande a bien été enregistrée. Notre équipe vous contactera rapidement.',
+        variant: 'success',
+      });
+    } catch {
+      await alert({
+        title: 'Erreur',
+        description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+        variant: 'error',
+      });
+    }
+  };
+
+  const handleClose = () => {
+    reset();
+    onOpenChange(false);
+  };
+
+  const ServiceIcon = service ? getServiceIcon(service.icon) : null;
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v ? handleClose() : onOpenChange(v)}>
+      <DialogContent className="sm:max-w-lg rounded-2xl border-0 shadow-2xl p-0 overflow-hidden gap-0 max-h-[90vh] overflow-y-auto [&>button]:hidden">
+        {service && ServiceIcon ? (
+          <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-6 pt-8 pb-6 text-white">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="absolute right-4 top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center shrink-0">
+                <ServiceIcon className="w-8 h-8 text-[#FF6600]" />
+              </div>
+              <div>
+                <p className="text-white/60 text-sm font-medium">Votre commande</p>
+                <DialogTitle className="text-2xl font-bold text-white mt-0.5">{service.name}</DialogTitle>
+                <p className="text-white/70 text-sm mt-1 line-clamp-2">
+                  {getServiceDescription(service.name)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-6 pt-8 pb-6 text-white">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="absolute right-4 top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <DialogTitle className="text-2xl font-bold text-white">Faire une demande</DialogTitle>
+            <p className="text-white/70 text-sm mt-1">Remplissez le formulaire pour être contacté rapidement</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+          {!service && (
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Service</label>
+              <FormSearchableSelect
+                control={control}
+                name="service_id"
+                options={serviceOptions}
+                placeholder="Choisir un service"
+                searchPlaceholder="Tapez le nom du service..."
+              />
+              {errors.service_id && (
+                <p className="text-red-500 text-sm mt-1">{errors.service_id.message}</p>
+              )}
+            </div>
+          )}
+
+          {service && <input type="hidden" {...register('service_id')} />}
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Nom complet</label>
+              <Input {...register('name')} placeholder="Votre nom" className="rounded-xl" />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Téléphone</label>
+              <Input {...register('phone')} placeholder="05XXXXXXXX" className="rounded-xl" />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Zone</label>
+            <FormSearchableSelect
+              control={control}
+              name="zone_id"
+              options={zoneOptions}
+              placeholder="Choisir une zone"
+              searchPlaceholder="Tapez le nom de la zone..."
+            />
+            {errors.zone_id && <p className="text-red-500 text-xs mt-1">{errors.zone_id.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Commune / Quartier</label>
+            <Input {...register('quartier')} placeholder="Ex: Angré, Blockhaus..." className="rounded-xl" />
+            {errors.quartier && <p className="text-red-500 text-xs mt-1">{errors.quartier.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Description du besoin</label>
+            <textarea
+              {...register('description')}
+              className="w-full min-h-[90px] rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6600]/30 focus:border-[#FF6600]"
+              placeholder="Décrivez votre besoin en détail..."
+            />
+            {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+          </div>
+
+          <Button type="submit" className="w-full rounded-xl h-11 text-base" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Envoi en cours...
+              </>
+            ) : (
+              'Envoyer ma demande'
+            )}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
