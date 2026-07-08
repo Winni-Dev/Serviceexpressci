@@ -27,6 +27,6 @@ jobs:
     steps:
       - name: Wake up Supabase
         run: |
-          curl -X GET "https://nogyvgarabenygzjdwlg.supabase.co/rest/v1/" \
+          curl -X GET "https://jenmcrkfjtifmgcsrpgm.supabase.co/rest/v1/" \
           -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
           -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
