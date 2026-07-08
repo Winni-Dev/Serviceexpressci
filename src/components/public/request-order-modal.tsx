@@ -267,6 +267,7 @@
 // }
 
 
+
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -358,6 +359,23 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
   const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
   const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
 
+  const openWhatsApp = (phoneNumber: string, message: string) => {
+    // Encoder le message pour l'URL
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    // Détecter si c'est un appareil mobile
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Sur mobile, utiliser window.location.href pour une redirection directe
+      window.location.href = url;
+    } else {
+      // Sur desktop, ouvrir dans un nouvel onglet
+      window.open(url, '_blank');
+    }
+  };
+
   const onSubmit = async (data: RequestForm) => {
     try {
       // Envoyer la demande dans la base de données
@@ -377,8 +395,7 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
         `📅 *Date:* ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
       
       // Ouvrir WhatsApp avec le message
-      const whatsappUrl = `https://wa.me/2250747753696?text=${message}`;
-      window.open(whatsappUrl, '_blank');
+      openWhatsApp('2250747753696', message);
       
       // Réinitialiser le formulaire et fermer le modal
       reset();
