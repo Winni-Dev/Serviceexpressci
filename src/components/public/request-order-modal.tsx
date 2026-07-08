@@ -266,7 +266,6 @@
 //   );
 // }
 
-
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -357,41 +356,38 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
   const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
   const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
 
-  // Fonction openWhatsApp améliorée avec fallback
+  // Fonction openWhatsApp avec fallback
   const openWhatsApp = (phoneNumber: string, message: string) => {
+    // Encoder le message pour l'URL sans caractères spéciaux
     const encodedMessage = encodeURIComponent(message);
-
-    // Détection des appareils mobiles
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // Sur mobile : essayer d'ouvrir l'application WhatsApp d'abord
       window.location.href = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-      // Fallback : si l'application n'est pas installée, ouvrir WhatsApp Web
       setTimeout(() => {
         window.location.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
       }, 500);
     } else {
-      // Sur desktop : ouvrir dans un nouvel onglet
       window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
     }
   };
 
   const onSubmit = async (data: RequestForm) => {
     try {
-      // Récupérer le nom du service
-      const serviceName = service?.name ?? services.find((s) => s.id === data.service_id)?.name ?? '';
+      // Récupérer les noms
+      const serviceName = service?.name ?? services.find((s) => s.id === data.service_id)?.name ?? 'Service non spécifié';
+      const zoneName = zones?.find((z) => z.id === data.zone_id)?.name ?? 'Zone non spécifiée';
       
-      // Construire le message WhatsApp
-      const message = `*Nouvelle demande de service* 📋%0A%0A` +
-        `👤 *Client:* ${data.name}%0A` +
-        `📱 *Téléphone:* ${data.phone}%0A` +
-        `🔧 *Service:* ${serviceName}%0A` +
-        `📍 *Zone:* ${zones?.find((z) => z.id === data.zone_id)?.name || ''}%0A` +
-        `🏠 *Commune:* ${data.quartier}%0A%0A` +
-        `📝 *Description:*%0A${data.description}%0A%0A` +
-        `📅 *Date:* ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+      // Construire le message WhatsApp - SANS caractères spéciaux ni emojis
+      const message = 
+        `Nouvelle demande de service\n\n` +
+        `Client: ${data.name}\n` +
+        `Telephone: ${data.phone}\n` +
+        `Service: ${serviceName}\n` +
+        `Zone: ${zoneName}\n` +
+        `Commune: ${data.quartier}\n\n` +
+        `Description:\n${data.description}\n\n` +
+        `Date: ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
       
       // 1. Ouvrir WhatsApp avec le message
       openWhatsApp("2250747753696", message);
