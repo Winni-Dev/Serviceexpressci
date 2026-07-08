@@ -303,7 +303,6 @@
 //   );
 // }
 
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Shield, Clock, Star, ChevronRight } from 'lucide-react';
@@ -319,10 +318,10 @@ const features = [
   { icon: Star, title: 'Satisfaction garantie', description: 'Travail de qualité ou remboursé' },
 ];
 
-// Composant de comptage animé corrigé pour mobile
-function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: number }) {
-  const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+// Composant de comptage animé - avec option pour désactiver l'animation
+function AnimatedCounter({ end, duration = 2000, animate = true }: { end: number; duration?: number; animate?: boolean }) {
+  const [count, setCount] = useState(animate ? 0 : end);
+  const [hasAnimated, setHasAnimated] = useState(!animate);
   const ref = useRef<HTMLSpanElement>(null);
   
   const isInView = useInView(ref, { 
@@ -331,6 +330,13 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
   });
 
   useEffect(() => {
+    // Si l'animation est désactivée, afficher directement la valeur finale
+    if (!animate) {
+      setCount(end);
+      setHasAnimated(true);
+      return;
+    }
+
     if (!isInView || hasAnimated) return;
 
     let startTime: number;
@@ -340,7 +346,6 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       
-      // Easing function pour une animation plus naturelle
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const currentCount = Math.floor(easeOutQuart * end);
       
@@ -358,11 +363,11 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
     return () => {
       if (animationFrame) cancelAnimationFrame(animationFrame);
     };
-  }, [isInView, end, duration, hasAnimated]);
+  }, [isInView, end, duration, hasAnimated, animate]);
 
-  // Fallback: si le compteur reste à 0 après l'animation
+  // Fallback pour les compteurs animés
   useEffect(() => {
-    if (isInView && !hasAnimated) {
+    if (animate && isInView && !hasAnimated) {
       const timer = setTimeout(() => {
         if (count === 0 && end > 0) {
           setCount(end);
@@ -371,11 +376,11 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
       }, duration + 500);
       return () => clearTimeout(timer);
     }
-  }, [isInView, end, duration, hasAnimated, count]);
+  }, [isInView, end, duration, hasAnimated, count, animate]);
 
   // Affichage correct des valeurs
   let displayValue = '0';
-  if (isInView || hasAnimated || count > 0) {
+  if ((isInView || hasAnimated || count > 0) || !animate) {
     if (end === 4.9) {
       displayValue = count.toFixed(1);
     } else if (Number.isInteger(end)) {
@@ -390,9 +395,9 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
 
 // Statistiques avec compteurs animés
 const stats = [
-  { value: 500, label: 'Interventions' },
-  { value: 4.9, label: 'Note moyenne' },
-  { value: 100, label: 'Satisfaction' },
+  { value: 500, label: 'Interventions', animate: false }, // Pas d'animation pour les interventions
+  { value: 4.9, label: 'Note moyenne', animate: true },
+  { value: 100, label: 'Satisfaction', animate: true },
 ];
 
 export function HomePage() {
@@ -549,7 +554,11 @@ export function HomePage() {
                   return (
                     <div key={index}>
                       <span className="text-xl font-bold text-[#FF6600]">
-                        <AnimatedCounter end={stat.value} duration={2000} />
+                        <AnimatedCounter 
+                          end={stat.value} 
+                          duration={2000} 
+                          animate={stat.animate !== undefined ? stat.animate : true}
+                        />
                         {suffix}
                       </span>
                       <p className="text-xs text-white/50">{stat.label}</p>
