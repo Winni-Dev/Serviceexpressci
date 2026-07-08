@@ -306,7 +306,7 @@
 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Shield, Clock, Star, ChevronRight, CheckCircle } from 'lucide-react';
+import { Shield, Clock, Star, ChevronRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { ServiceList } from '@/components/public/service-list';
@@ -319,12 +319,16 @@ const features = [
   { icon: Star, title: 'Satisfaction garantie', description: 'Travail de qualité ou remboursé' },
 ];
 
-// Composant de comptage animé corrigé
+// Composant de comptage animé corrigé pour mobile
 function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  
+  const isInView = useInView(ref, { 
+    once: true, 
+    margin: "-50px"
+  });
 
   useEffect(() => {
     if (!isInView || hasAnimated) return;
@@ -356,10 +360,25 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
     };
   }, [isInView, end, duration, hasAnimated]);
 
+  // Fallback: si le compteur reste à 0 après l'animation
+  useEffect(() => {
+    if (isInView && !hasAnimated) {
+      const timer = setTimeout(() => {
+        if (count === 0 && end > 0) {
+          setCount(end);
+          setHasAnimated(true);
+        }
+      }, duration + 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, end, duration, hasAnimated, count]);
+
   // Affichage correct des valeurs
   let displayValue = '0';
-  if (isInView || hasAnimated) {
-    if (Number.isInteger(end)) {
+  if (isInView || hasAnimated || count > 0) {
+    if (end === 4.9) {
+      displayValue = count.toFixed(1);
+    } else if (Number.isInteger(end)) {
       displayValue = `${count}+`;
     } else {
       displayValue = count.toFixed(1);
@@ -371,9 +390,9 @@ function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: num
 
 // Statistiques avec compteurs animés
 const stats = [
-  { value: 500, label: 'Interventions', suffix: '+', isInteger: true },
-  { value: 4.9, label: 'Note moyenne', suffix: '', isInteger: false },
-  { value: 100, label: 'Satisfaction', suffix: '%', isInteger: true },
+  { value: 500, label: 'Interventions' },
+  { value: 4.9, label: 'Note moyenne' },
+  { value: 100, label: 'Satisfaction' },
 ];
 
 export function HomePage() {
@@ -521,15 +540,22 @@ export function HomePage() {
                 transition={{ delay: 0.4 }}
                 className="flex gap-8 mt-8 pt-6 border-t border-white/10"
               >
-                {stats.map((stat, index) => (
-                  <div key={index}>
-                    <span className="text-xl font-bold text-[#FF6600]">
-                      <AnimatedCounter end={stat.value} duration={2000} />
-                      {stat.suffix}
-                    </span>
-                    <p className="text-xs text-white/50">{stat.label}</p>
-                  </div>
-                ))}
+                {stats.map((stat, index) => {
+                  let suffix = '';
+                  if (stat.value === 500) suffix = '+';
+                  if (stat.value === 100) suffix = '%';
+                  if (stat.value === 4.9) suffix = '';
+                  
+                  return (
+                    <div key={index}>
+                      <span className="text-xl font-bold text-[#FF6600]">
+                        <AnimatedCounter end={stat.value} duration={2000} />
+                        {suffix}
+                      </span>
+                      <p className="text-xs text-white/50">{stat.label}</p>
+                    </div>
+                  );
+                })}
               </motion.div>
             </motion.div>
           </div>
