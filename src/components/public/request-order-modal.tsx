@@ -1,4 +1,8 @@
-// import { useEffect } from 'react';
+
+
+
+
+// import { useEffect, useRef } from 'react';
 // import { useForm } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { z } from 'zod';
@@ -40,6 +44,7 @@
 //   const { data: zones } = useZones();
 //   const createRequest = useCreateRequest();
 //   const { alert } = useConfirm();
+//   const formRef = useRef<HTMLFormElement>(null);
 
 //   const {
 //     register,
@@ -59,6 +64,32 @@
 //       setValue('service_id', '');
 //     }
 //   }, [open, service, setValue]);
+
+//   // Empêcher le zoom sur mobile lors du focus des inputs
+//   useEffect(() => {
+//     const handleFocus = (e: FocusEvent) => {
+//       const target = e.target as HTMLElement;
+//       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
+//         // Forcer la taille de police à 16px pour éviter le zoom sur iOS
+//         target.style.fontSize = '16px';
+//       }
+//     };
+
+//     const handleBlur = (e: FocusEvent) => {
+//       const target = e.target as HTMLElement;
+//       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
+//         target.style.fontSize = '';
+//       }
+//     };
+
+//     document.addEventListener('focusin', handleFocus);
+//     document.addEventListener('focusout', handleBlur);
+
+//     return () => {
+//       document.removeEventListener('focusin', handleFocus);
+//       document.removeEventListener('focusout', handleBlur);
+//     };
+//   }, []);
 
 //   const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
 //   const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
@@ -94,47 +125,54 @@
 
 //   return (
 //     <Dialog open={open} onOpenChange={(v) => !v ? handleClose() : onOpenChange(v)}>
-//       <DialogContent className="sm:max-w-lg rounded-2xl border-0 shadow-2xl p-0 overflow-hidden gap-0 max-h-[90vh] overflow-y-auto [&>button]:hidden">
+//       <DialogContent className="sm:max-w-lg rounded-2xl border-0 shadow-2xl p-0 overflow-hidden gap-0 max-h-[95vh] sm:max-h-[90vh] overflow-y-auto [&>button]:hidden">
+//         {/* Header */}
 //         {service && ServiceIcon ? (
-//           <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-6 pt-8 pb-6 text-white">
+//           <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-4 sm:px-6 pt-6 sm:pt-8 pb-5 sm:pb-6 text-white shrink-0">
 //             <button
 //               type="button"
 //               onClick={handleClose}
-//               className="absolute right-4 top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
+//               className="absolute right-3 sm:right-4 top-3 sm:top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
 //             >
 //               <X className="w-4 h-4" />
 //             </button>
-//             <div className="flex items-center gap-4">
-//               <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center shrink-0">
-//                 <ServiceIcon className="w-8 h-8 text-[#FF6600]" />
+//             <div className="flex items-center gap-3 sm:gap-4">
+//               <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center shrink-0">
+//                 <ServiceIcon className="w-6 h-6 sm:w-8 sm:h-8 text-[#FF6600]" />
 //               </div>
-//               <div>
-//                 <p className="text-white/60 text-sm font-medium">Votre commande</p>
-//                 <DialogTitle className="text-2xl font-bold text-white mt-0.5">{service.name}</DialogTitle>
-//                 <p className="text-white/70 text-sm mt-1 line-clamp-2">
+//               <div className="min-w-0 flex-1">
+//                 <p className="text-white/60 text-xs sm:text-sm font-medium">Votre commande</p>
+//                 <DialogTitle className="text-xl sm:text-2xl font-bold text-white mt-0.5 truncate">{service.name}</DialogTitle>
+//                 <p className="text-white/70 text-xs sm:text-sm mt-0.5 line-clamp-1 sm:line-clamp-2">
 //                   {getServiceDescription(service.name)}
 //                 </p>
 //               </div>
 //             </div>
 //           </div>
 //         ) : (
-//           <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-6 pt-8 pb-6 text-white">
+//           <div className="relative bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-4 sm:px-6 pt-6 sm:pt-8 pb-5 sm:pb-6 text-white shrink-0">
 //             <button
 //               type="button"
 //               onClick={handleClose}
-//               className="absolute right-4 top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
+//               className="absolute right-3 sm:right-4 top-3 sm:top-4 rounded-full p-1.5 bg-white/10 hover:bg-white/20 transition-colors"
 //             >
 //               <X className="w-4 h-4" />
 //             </button>
-//             <DialogTitle className="text-2xl font-bold text-white">Faire une demande</DialogTitle>
-//             <p className="text-white/70 text-sm mt-1">Remplissez le formulaire pour être contacté rapidement</p>
+//             <DialogTitle className="text-xl sm:text-2xl font-bold text-white">Faire une demande</DialogTitle>
+//             <p className="text-white/70 text-xs sm:text-sm mt-1">Remplissez le formulaire pour être contacté rapidement</p>
 //           </div>
 //         )}
 
-//         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+//         {/* Formulaire */}
+//         <form 
+//           ref={formRef}
+//           onSubmit={handleSubmit(onSubmit)} 
+//           className="p-4 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto flex-1"
+//           style={{ fontSize: '16px' }}
+//         >
 //           {!service && (
 //             <div>
-//               <label className="block text-sm font-medium mb-2 text-gray-700">Service</label>
+//               <label className="block text-sm font-medium mb-1.5 text-gray-700">Service</label>
 //               <FormSearchableSelect
 //                 control={control}
 //                 name="service_id"
@@ -143,28 +181,39 @@
 //                 searchPlaceholder="Tapez le nom du service..."
 //               />
 //               {errors.service_id && (
-//                 <p className="text-red-500 text-sm mt-1">{errors.service_id.message}</p>
+//                 <p className="text-red-500 text-xs mt-1">{errors.service_id.message}</p>
 //               )}
 //             </div>
 //           )}
 
 //           {service && <input type="hidden" {...register('service_id')} />}
 
-//           <div className="grid sm:grid-cols-2 gap-4">
+//           <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
 //             <div>
-//               <label className="block text-sm font-medium mb-2 text-gray-700">Nom complet</label>
-//               <Input {...register('name')} placeholder="Votre nom" className="rounded-xl" />
+//               <label className="block text-sm font-medium mb-1.5 text-gray-700">Nom complet</label>
+//               <Input 
+//                 {...register('name')} 
+//                 placeholder="Votre nom" 
+//                 className="rounded-xl text-base h-11 sm:h-10" 
+//                 style={{ fontSize: '16px' }}
+//               />
 //               {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
 //             </div>
 //             <div>
-//               <label className="block text-sm font-medium mb-2 text-gray-700">Téléphone</label>
-//               <Input {...register('phone')} placeholder="05XXXXXXXX" className="rounded-xl" />
+//               <label className="block text-sm font-medium mb-1.5 text-gray-700">Téléphone</label>
+//               <Input 
+//                 {...register('phone')} 
+//                 placeholder="05XXXXXXXX" 
+//                 className="rounded-xl text-base h-11 sm:h-10" 
+//                 style={{ fontSize: '16px' }}
+//                 type="tel"
+//               />
 //               {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
 //             </div>
 //           </div>
 
 //           <div>
-//             <label className="block text-sm font-medium mb-2 text-gray-700">Zone</label>
+//             <label className="block text-sm font-medium mb-1.5 text-gray-700">Zone</label>
 //             <FormSearchableSelect
 //               control={control}
 //               name="zone_id"
@@ -176,22 +225,32 @@
 //           </div>
 
 //           <div>
-//             <label className="block text-sm font-medium mb-2 text-gray-700">Commune / Quartier</label>
-//             <Input {...register('quartier')} placeholder="Ex: Angré, Blockhaus..." className="rounded-xl" />
+//             <label className="block text-sm font-medium mb-1.5 text-gray-700">Commune / Quartier</label>
+//             <Input 
+//               {...register('quartier')} 
+//               placeholder="Ex: Angré, Blockhaus..." 
+//               className="rounded-xl text-base h-11 sm:h-10" 
+//               style={{ fontSize: '16px' }}
+//             />
 //             {errors.quartier && <p className="text-red-500 text-xs mt-1">{errors.quartier.message}</p>}
 //           </div>
 
 //           <div>
-//             <label className="block text-sm font-medium mb-2 text-gray-700">Description du besoin</label>
+//             <label className="block text-sm font-medium mb-1.5 text-gray-700">Description du besoin</label>
 //             <textarea
 //               {...register('description')}
-//               className="w-full min-h-[90px] rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6600]/30 focus:border-[#FF6600]"
+//               className="w-full min-h-[80px] sm:min-h-[90px] rounded-xl border border-gray-200 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#FF6600]/30 focus:border-[#FF6600] resize-none"
 //               placeholder="Décrivez votre besoin en détail..."
+//               style={{ fontSize: '16px' }}
 //             />
 //             {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
 //           </div>
 
-//           <Button type="submit" className="w-full rounded-xl h-11 text-base" disabled={isSubmitting}>
+//           <Button 
+//             type="submit" 
+//             className="w-full rounded-xl h-12 sm:h-11 text-base" 
+//             disabled={isSubmitting}
+//           >
 //             {isSubmitting ? (
 //               <>
 //                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -276,7 +335,6 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
     const handleFocus = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
-        // Forcer la taille de police à 16px pour éviter le zoom sur iOS
         target.style.fontSize = '16px';
       }
     };
@@ -302,18 +360,38 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
 
   const onSubmit = async (data: RequestForm) => {
     try {
+      // Envoyer la demande dans la base de données
       await createRequest.mutateAsync(data);
+      
+      // Récupérer le nom du service
       const serviceName = service?.name ?? services.find((s) => s.id === data.service_id)?.name ?? '';
-      const message = `Bonjour, je souhaite faire une demande de service:\nService: ${serviceName}\nNom: ${data.name}\nTéléphone: ${data.phone}\nCommune: ${data.quartier}\nDescription: ${data.description}`;
-      window.open(generateWhatsAppLink('0123456789', message), '_blank');
+      
+      // Construire le message WhatsApp
+      const message = `*Nouvelle demande de service* 📋%0A%0A` +
+        `👤 *Client:* ${data.name}%0A` +
+        `📱 *Téléphone:* ${data.phone}%0A` +
+        `🔧 *Service:* ${serviceName}%0A` +
+        `📍 *Zone:* ${zones?.find((z) => z.id === data.zone_id)?.name || ''}%0A` +
+        `🏠 *Commune:* ${data.quartier}%0A%0A` +
+        `📝 *Description:*%0A${data.description}%0A%0A` +
+        `📅 *Date:* ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+      
+      // Ouvrir WhatsApp avec le message
+      const whatsappUrl = `https://wa.me/2250747753696?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+      
+      // Réinitialiser le formulaire et fermer le modal
       reset();
       onOpenChange(false);
+      
+      // Afficher un message de succès
       await alert({
-        title: 'Demande envoyée !',
-        description: 'Votre demande a bien été enregistrée. Notre équipe vous contactera rapidement.',
+        title: 'Demande envoyée ! ✅',
+        description: 'Votre demande a bien été enregistrée. Notre équipe vous contactera rapidement sur WhatsApp.',
         variant: 'success',
       });
-    } catch {
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi:', error);
       await alert({
         title: 'Erreur',
         description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
@@ -454,7 +532,7 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
 
           <Button 
             type="submit" 
-            className="w-full rounded-xl h-12 sm:h-11 text-base" 
+            className="w-full rounded-xl h-12 sm:h-11 text-base bg-gradient-to-r from-[#FF6600] to-[#e55a00] hover:shadow-lg hover:shadow-[#FF6600]/30 transition-all duration-300" 
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -466,6 +544,12 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
               'Envoyer ma demande'
             )}
           </Button>
+          
+          <p className="text-center text-xs text-gray-400 mt-2">
+            <span className="flex items-center justify-center gap-1">
+              <span>📱</span> Vous serez contacté via WhatsApp
+            </span>
+          </p>
         </form>
       </DialogContent>
     </Dialog>
