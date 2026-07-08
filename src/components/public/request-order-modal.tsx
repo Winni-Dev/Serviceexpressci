@@ -267,7 +267,6 @@
 // }
 
 
-
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -283,7 +282,6 @@ import { FormSearchableSelect } from '@/components/ui/form-searchable-select';
 import { useCreateRequest } from '@/hooks/useRequests';
 import { useZones } from '@/hooks/useZones';
 import { useConfirm } from '@/contexts/confirm-context';
-import { generateWhatsAppLink } from '@/lib/utils';
 import { getServiceIcon, getServiceDescription } from '@/lib/service-icons';
 import { Loader2, X } from 'lucide-react';
 import type { Service } from '@/types';
@@ -359,28 +357,29 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
   const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
   const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
 
+  // Fonction openWhatsApp améliorée avec fallback
   const openWhatsApp = (phoneNumber: string, message: string) => {
-    // Encoder le message pour l'URL
     const encodedMessage = encodeURIComponent(message);
-    const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    
-    // Détecter si c'est un appareil mobile
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
-    
+
+    // Détection des appareils mobiles
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     if (isMobile) {
-      // Sur mobile, utiliser window.location.href pour une redirection directe
-      window.location.href = url;
+      // Sur mobile : essayer d'ouvrir l'application WhatsApp d'abord
+      window.location.href = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+      // Fallback : si l'application n'est pas installée, ouvrir WhatsApp Web
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      }, 500);
     } else {
-      // Sur desktop, ouvrir dans un nouvel onglet
-      window.open(url, '_blank');
+      // Sur desktop : ouvrir dans un nouvel onglet
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
     }
   };
 
   const onSubmit = async (data: RequestForm) => {
     try {
-      // Envoyer la demande dans la base de données
-      await createRequest.mutateAsync(data);
-      
       // Récupérer le nom du service
       const serviceName = service?.name ?? services.find((s) => s.id === data.service_id)?.name ?? '';
       
@@ -394,14 +393,19 @@ export function RequestOrderModal({ open, onOpenChange, service, services = [] }
         `📝 *Description:*%0A${data.description}%0A%0A` +
         `📅 *Date:* ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
       
-      // Ouvrir WhatsApp avec le message
-      openWhatsApp('2250747753696', message);
-      
-      // Réinitialiser le formulaire et fermer le modal
+      // 1. Ouvrir WhatsApp avec le message
+      openWhatsApp("2250747753696", message);
+
+      // 2. Enregistrer la demande dans la base de données
+      await createRequest.mutateAsync(data);
+
+      // 3. Réinitialiser le formulaire
       reset();
+
+      // 4. Fermer la fenêtre modale
       onOpenChange(false);
-      
-      // Afficher un message de succès
+
+      // 5. Afficher un message de succès
       await alert({
         title: 'Demande envoyée ! ✅',
         description: 'Votre demande a bien été enregistrée. Notre équipe vous contactera rapidement sur WhatsApp.',
