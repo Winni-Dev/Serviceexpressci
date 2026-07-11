@@ -26,7 +26,7 @@ export function useCreateRequest() {
 export function useUpdateRequestStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status, workerId }: { id: string; status: string; workerId?: string }) =>
+    mutationFn: ({ id, status, workerId }: { id: string; status: string; workerId?: string | null }) =>
       updateRequestStatus(id, status, workerId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['requests'] }),
   });

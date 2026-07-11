@@ -69,7 +69,7 @@ export interface Request {
   zone_id: string;
   description: string;
   status: RequestStatus;
-  worker_id?: string;
+  worker_id?: string | null;
   created_at: string;
   services?: { name: string };
   zones?: { name: string };

@@ -129,7 +129,7 @@ export async function createRequest(request: Partial<Request>) {
   return data;
 }
 
-export async function updateRequestStatus(id: string, status: string, workerId?: string) {
+export async function updateRequestStatus(id: string, status: string, workerId?: string | null) {
   const { error } = await supabase
     .from('requests')
     .update({ status, worker_id: workerId })
