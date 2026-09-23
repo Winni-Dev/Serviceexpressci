@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { getHomeForRole } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 
-const urgencyLink = getSafeUrl(getUrgencyWhatsAppLink(), 'https://wa.me/2250123456789');
+const urgencyLink = getSafeUrl(getUrgencyWhatsAppLink(), 'https://wa.me/2250143344342');
 
 const navLinks = [
   { to: '/', label: 'Accueil', icon: Home },

@@ -379,6 +379,513 @@
 //   );
 // }
 
+
+
+// import { useEffect, useRef, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { useForm } from 'react-hook-form';
+// import { zodResolver } from '@hookform/resolvers/zod';
+// import { z } from 'zod';
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogTitle,
+// } from '@/components/ui/dialog';
+// import { Button } from '@/components/ui/button';
+// import { Input } from '@/components/ui/input';
+// import { FormSearchableSelect } from '@/components/ui/form-searchable-select';
+// import { useCreateRequest } from '@/hooks/useRequests';
+// import { uploadRequestPhoto } from '@/lib/storage';
+// import { useZones } from '@/hooks/useZones';
+// import { useConfirm } from '@/contexts/confirm-context';
+// import { useAuth } from '@/contexts/auth-context';
+// import { getServiceIcon, getServiceDescription } from '@/lib/service-icons';
+// import {
+//   Loader2,
+//   X,
+//   Camera,
+//   Trash2,
+//   ArrowRight,
+//   ShieldCheck,
+// } from 'lucide-react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { cn } from '@/lib/utils';
+// import type { Service } from '@/types';
+
+// /* -------------------------------------------------------------------------- */
+// /*                                   Schema                                   */
+// /* -------------------------------------------------------------------------- */
+
+// const requestSchema = z.object({
+//   name: z.string().min(2, 'Nom requis'),
+//   phone: z.string().min(8, 'Numéro invalide'),
+//   service_id: z.string().min(1, 'Service requis'),
+//   quartier: z.string().min(2, 'Commune requise'),
+//   zone_id: z.string().min(1, 'Zone requise'),
+//   description: z.string().min(10, 'Trop court'),
+// });
+
+// type RequestForm = z.infer<typeof requestSchema>;
+
+// interface RequestOrderModalProps {
+//   open: boolean;
+//   onOpenChange: (open: boolean) => void;
+//   service: Service | null;
+//   services?: Service[];
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*                                 Sous-comps                                 */
+// /* -------------------------------------------------------------------------- */
+
+// function FieldLabel({ children }: { children: React.ReactNode }) {
+//   return (
+//     <label className="mb-1 block text-[11px] font-medium text-foreground/70">
+//       {children}
+//     </label>
+//   );
+// }
+
+// function FieldError({ message }: { message?: string }) {
+//   return (
+//     <AnimatePresence>
+//       {message && (
+//         <motion.p
+//           initial={{ opacity: 0, y: -2 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           exit={{ opacity: 0, y: -2 }}
+//           transition={{ duration: 0.15 }}
+//           className="mt-1 text-[10.5px] font-medium text-red-500"
+//         >
+//           {message}
+//         </motion.p>
+//       )}
+//     </AnimatePresence>
+//   );
+// }
+
+// const inputCls = cn(
+//   'h-9 rounded-lg border-border/60 bg-muted/20 text-[13.5px]',
+//   'transition-all duration-200',
+//   'focus-visible:border-[#FF6600]/50 focus-visible:ring-2 focus-visible:ring-[#FF6600]/15'
+// );
+
+// /* -------------------------------------------------------------------------- */
+// /*                              Request Order Modal                           */
+// /* -------------------------------------------------------------------------- */
+
+// export function RequestOrderModal({
+//   open,
+//   onOpenChange,
+//   service,
+//   services = [],
+// }: RequestOrderModalProps) {
+//   const { data: zones } = useZones();
+//   const createRequest = useCreateRequest();
+//   const { alert } = useConfirm();
+//   const { session, profile } = useAuth();
+//   const navigate = useNavigate();
+//   const formRef = useRef<HTMLFormElement>(null);
+
+//   const {
+//     register,
+//     handleSubmit,
+//     control,
+//     reset,
+//     setValue,
+//     watch,
+//     formState: { errors, isSubmitting },
+//   } = useForm<RequestForm>({
+//     resolver: zodResolver(requestSchema),
+//   });
+
+//   const [photo, setPhoto] = useState<File | null>(null);
+//   const [preview, setPreview] = useState<string | null>(null);
+//   const [imageModalOpen, setImageModalOpen] = useState(false);
+//   const [imageModalUrl, setImageModalUrl] = useState<string | null>(null);
+//   const fileInputRef = useRef<HTMLInputElement>(null);
+
+//   const descriptionValue = watch('description') ?? '';
+
+//   useEffect(() => {
+//     if (open && service) {
+//       setValue('service_id', service.id);
+//     } else if (open && !service) {
+//       setValue('service_id', '');
+//     }
+//     if (open && profile) {
+//       if (profile.name) setValue('name', profile.name);
+//       if (profile.phone) setValue('phone', profile.phone);
+//       if (profile.zone_id) setValue('zone_id', profile.zone_id);
+//     }
+//   }, [open, service, setValue, profile]);
+
+//   useEffect(() => {
+//     const handleFocus = (e: FocusEvent) => {
+//       const t = e.target as HTMLElement;
+//       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName)) {
+//         t.style.fontSize = '16px';
+//       }
+//     };
+//     const handleBlur = (e: FocusEvent) => {
+//       const t = e.target as HTMLElement;
+//       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName)) {
+//         t.style.fontSize = '';
+//       }
+//     };
+//     document.addEventListener('focusin', handleFocus);
+//     document.addEventListener('focusout', handleBlur);
+//     return () => {
+//       document.removeEventListener('focusin', handleFocus);
+//       document.removeEventListener('focusout', handleBlur);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!photo) {
+//       setPreview(null);
+//       return;
+//     }
+//     const url = URL.createObjectURL(photo);
+//     setPreview(url);
+//     return () => URL.revokeObjectURL(url);
+//   }, [photo]);
+
+//   const zoneOptions = zones?.map((z) => ({ value: z.id, label: z.name })) ?? [];
+//   const serviceOptions = services.map((s) => ({ value: s.id, label: s.name }));
+
+//   const goToRegister = () => {
+//     onOpenChange(false);
+//     navigate('/inscription', { state: { from: '/demande' } });
+//   };
+//   const goToLogin = () => {
+//     onOpenChange(false);
+//     navigate('/connexion', { state: { from: '/demande' } });
+//   };
+
+//   const onSubmit = async (data: RequestForm) => {
+//     if (!session) {
+//       goToRegister();
+//       return;
+//     }
+//     try {
+//       let photoUrl: string | undefined;
+//       if (photo && session.user.id) {
+//         photoUrl = await uploadRequestPhoto(photo, session.user.id);
+//       }
+//       await createRequest.mutateAsync({
+//         ...data,
+//         client_id: session.user.id,
+//         photo_url: photoUrl,
+//       });
+//       reset();
+//       setPhoto(null);
+//       onOpenChange(false);
+//       await alert({
+//         title: 'Demande envoyée !',
+//         description:
+//           "Les professionnels concernés vont proposer un prix. Suivez l'avancement dans Mon espace.",
+//         variant: 'success',
+//       });
+//       navigate('/espace');
+//     } catch (error) {
+//       console.error(error);
+//       await alert({
+//         title: 'Erreur',
+//         description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+//         variant: 'error',
+//       });
+//     }
+//   };
+
+//   const handleClose = () => {
+//     reset();
+//     setPhoto(null);
+//     onOpenChange(false);
+//   };
+
+//   const ServiceIcon = service ? getServiceIcon(service.icon) : null;
+
+//   return (
+//     <Dialog open={open} onOpenChange={(v) => (!v ? handleClose() : onOpenChange(v))}>
+//       <DialogContent
+//         className={cn(
+//           'gap-0 overflow-hidden rounded-2xl border border-border/70 bg-background p-0 shadow-2xl',
+//           'w-[calc(100%-1.25rem)] max-w-[21.5rem] sm:max-w-md',
+//           'max-h-[88vh] overflow-y-auto',
+//           '[&>button]:hidden'
+//         )}
+//       >
+//         {/* ============================= HEADER (compact) ============================= */}
+//         <div className="relative flex items-center gap-3 px-4 py-3.5 border-b border-border/60 bg-background">
+//           {/* Trait orange signature */}
+//           <span className="absolute left-0 top-0 h-full w-[3px] bg-[#FF6600]" />
+
+//           {service && ServiceIcon ? (
+//             <div className="flex items-center justify-center border rounded-lg h-9 w-9 shrink-0 border-border/70 bg-muted/40">
+//               <ServiceIcon className="h-4 w-4 text-[#FF6600]" strokeWidth={1.75} />
+//             </div>
+//           ) : (
+//             <div className="flex items-center justify-center border rounded-lg h-9 w-9 shrink-0 border-border/70 bg-muted/40">
+//               <Camera className="h-4 w-4 text-[#FF6600]" strokeWidth={1.75} />
+//             </div>
+//           )}
+
+//           <div className="flex-1 min-w-0 pr-8">
+//             <DialogTitle className="truncate text-[14px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
+//               {service ? service.name : 'Nouvelle demande'}
+//             </DialogTitle>
+//             <p className="mt-0.5 truncate text-[10.5px] text-muted-foreground">
+//               {service
+//                 ? getServiceDescription(service.name)
+//                 : 'Décrivez votre besoin, recevez des propositions.'}
+//             </p>
+//           </div>
+
+//           <button
+//             type="button"
+//             onClick={handleClose}
+//             aria-label="Fermer"
+//             className="absolute right-3 top-3.5 flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+//           >
+//             <X className="h-3.5 w-3.5" strokeWidth={2} />
+//           </button>
+//         </div>
+
+//         {/* ============================= BODY ============================= */}
+//         {!session ? (
+//           <div className="p-4 space-y-3 text-center">
+//             <p className="text-[12.5px] leading-relaxed text-muted-foreground">
+//               Pour envoyer une demande, créez un compte ou connectez-vous.
+//             </p>
+//             <div className="flex flex-col gap-2">
+//               <Button
+//                 onClick={goToRegister}
+//                 className="group h-10 w-full gap-1.5 rounded-full bg-[#FF6600] text-white shadow-sm shadow-[#FF6600]/25 hover:bg-[#e55a00]"
+//               >
+//                 <span className="text-[13px] font-medium">Créer mon compte</span>
+//                 <ArrowRight
+//                   className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+//                   strokeWidth={2}
+//                 />
+//               </Button>
+//               <Button
+//                 variant="ghost"
+//                 onClick={goToLogin}
+//                 className="h-10 w-full rounded-full text-[13px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+//               >
+//                 J'ai déjà un compte
+//               </Button>
+//             </div>
+//           </div>
+//         ) : (
+//           <form
+//             ref={formRef}
+//             onSubmit={handleSubmit(onSubmit)}
+//             className="space-y-3 px-2.5 py-4 sm:px-4"
+//             style={{ fontSize: '16px' }}
+//           >
+//             {/* Service (si non pré-sélectionné) */}
+//             {!service && (
+//               <div>
+//                 <FieldLabel>Service</FieldLabel>
+//                 <FormSearchableSelect
+//                   control={control}
+//                   name="service_id"
+//                   options={serviceOptions}
+//                   placeholder="Choisir un service"
+//                   searchPlaceholder="Rechercher…"
+//                 />
+//                 <FieldError message={errors.service_id?.message} />
+//               </div>
+//             )}
+//             {service && <input type="hidden" {...register('service_id')} />}
+
+//             {/* Nom + Téléphone */}
+//             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+//               <div>
+//                 <FieldLabel>Nom</FieldLabel>
+//                 <Input
+//                   {...register('name')}
+//                   placeholder="Kouassi Jean"
+//                   className={inputCls}
+//                   style={{ fontSize: '16px' }}
+//                 />
+//                 <FieldError message={errors.name?.message} />
+//               </div>
+//               <div>
+//                 <FieldLabel>Téléphone</FieldLabel>
+//                 <Input
+//                   {...register('phone')}
+//                   type="tel"
+//                   inputMode="tel"
+//                   placeholder="07 00 00 00 00"
+//                   className={inputCls}
+//                   style={{ fontSize: '16px' }}
+//                 />
+//                 <FieldError message={errors.phone?.message} />
+//               </div>
+//             </div>
+
+//             {/* Zone + Commune */}
+//             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+//               <div>
+//                 <FieldLabel>Zone</FieldLabel>
+//                 <FormSearchableSelect
+//                   control={control}
+//                   name="zone_id"
+//                   options={zoneOptions}
+//                   placeholder="Zone"
+//                   searchPlaceholder="Rechercher…"
+//                 />
+//                 <FieldError message={errors.zone_id?.message} />
+//               </div>
+//               <div>
+//                 <FieldLabel>Quartier</FieldLabel>
+//                 <Input
+//                   {...register('quartier')}
+//                   placeholder="Angré…"
+//                   className={inputCls}
+//                   style={{ fontSize: '16px' }}
+//                 />
+//                 <FieldError message={errors.quartier?.message} />
+//               </div>
+//             </div>
+
+//             {/* Description */}
+//             <div>
+//               <div className="flex items-baseline justify-between mb-1">
+//                 <FieldLabel>Décrivez votre besoin</FieldLabel>
+//                 <span className="text-[10px] tabular-nums text-muted-foreground/50">
+//                   {descriptionValue.length}
+//                 </span>
+//               </div>
+//               <textarea
+//                 {...register('description')}
+//                 rows={3}
+//                 placeholder="Ex : Fuite sous l'évier, urgente, 3e étage…"
+//                 className={cn(
+//                   'w-full resize-none rounded-lg border border-border/60 bg-muted/20 px-3 py-2',
+//                   'text-[12.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
+//                   'transition-all duration-200',
+//                   'focus:border-[#FF6600]/50 focus:outline-none focus:ring-2 focus:ring-[#FF6600]/15'
+//                 )}
+//                 style={{ fontSize: '16px' }}
+//               />
+//               <FieldError message={errors.description?.message} />
+//             </div>
+
+//             {/* Photo compacte */}
+//             <div>
+//               <input
+//                 ref={fileInputRef}
+//                 type="file"
+//                 accept="image/*"
+//                 capture="environment"
+//                 className="hidden"
+//                 onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+//               />
+
+//               {!preview ? (
+//                 <button
+//                   type="button"
+//                   onClick={() => fileInputRef.current?.click()}
+//                   className={cn(
+//                     'group flex w-full items-center gap-2.5 rounded-lg border border-dashed border-border/70 bg-muted/10 px-3 py-2.5 text-left',
+//                     'transition-all duration-200',
+//                     'hover:border-[#FF6600]/40 hover:bg-[#FF6600]/[0.04]'
+//                   )}
+//                 >
+//                   <Camera
+//                     className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors group-hover:text-[#FF6600]"
+//                     strokeWidth={1.75}
+//                   />
+//                   <span className="flex-1 text-[12px] text-muted-foreground">
+//                     Ajouter une photo
+//                   </span>
+//                   <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">
+//                     Optionnel
+//                   </span>
+//                 </button>
+//               ) : (
+//                 <div className="relative overflow-hidden border rounded-lg border-border/70 bg-muted/20">
+//                   <img
+//                     src={preview}
+//                     alt="Aperçu"
+//                     onClick={() => {
+//                       setImageModalUrl(preview);
+//                       setImageModalOpen(true);
+//                     }}
+//                     className="object-cover w-full max-h-32 cursor-zoom-in"
+//                   />
+//                   <button
+//                     type="button"
+//                     onClick={() => setPhoto(null)}
+//                     aria-label="Supprimer"
+//                     className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-background/90 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:text-red-500"
+//                   >
+//                     <Trash2 className="w-3 h-3" strokeWidth={1.75} />
+//                   </button>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Submit */}
+//             <div className="pt-1 space-y-2">
+//               <Button
+//                 type="submit"
+//                 disabled={isSubmitting}
+//                 className="group h-10 w-full gap-1.5 rounded-full bg-[#FF6600] text-white shadow-sm shadow-[#FF6600]/25 transition-all duration-300 hover:bg-[#e55a00] disabled:opacity-60"
+//               >
+//                 {isSubmitting ? (
+//                   <>
+//                     <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
+//                     <span className="text-[12.5px] font-medium">Envoi…</span>
+//                   </>
+//                 ) : (
+//                   <>
+//                     <span className="text-[12.5px] font-medium">Envoyer</span>
+//                     <ArrowRight
+//                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+//                       strokeWidth={2}
+//                     />
+//                   </>
+//                 )}
+//               </Button>
+
+//               <p className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
+//                 <ShieldCheck className="w-3 h-3" strokeWidth={1.75} />
+//                 Sécurisé · Sans engagement
+//               </p>
+//             </div>
+//           </form>
+//         )}
+
+//         {/* ============================= IMAGE MODAL ============================= */}
+//         <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
+//           <DialogContent
+//             className={cn(
+//               'gap-0 overflow-hidden rounded-2xl border border-border/70 p-0 shadow-2xl',
+//               'sm:max-w-2xl'
+//             )}
+//           >
+//             {imageModalUrl && (
+//               <div className="flex max-h-[75vh] items-center justify-center bg-muted/20 p-4">
+//                 <img
+//                   src={imageModalUrl}
+//                   alt="Grande vue"
+//                   className="max-h-[70vh] w-auto rounded-lg"
+//                 />
+//               </div>
+//             )}
+//           </DialogContent>
+//         </Dialog>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }
+
+
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -463,7 +970,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const inputCls = cn(
-  'h-9 rounded-lg border-border/60 bg-muted/20 text-[13.5px]',
+  'h-9 w-full rounded-lg border-border/60 bg-muted/20 text-[13.5px]',
   'transition-all duration-200',
   'focus-visible:border-[#FF6600]/50 focus-visible:ring-2 focus-visible:ring-[#FF6600]/15'
 );
@@ -609,13 +1116,14 @@ export function RequestOrderModal({
       <DialogContent
         className={cn(
           'gap-0 overflow-hidden rounded-2xl border border-border/70 bg-background p-0 shadow-2xl',
-          'sm:max-w-md',
-          'max-h-[92vh] overflow-y-auto',
+          // Largeur : fluide sur mobile, fixe sur sm+
+          'w-[calc(100vw-1.5rem)] max-w-[22rem] sm:w-full sm:max-w-md',
+          'max-h-[88vh] overflow-y-auto',
           '[&>button]:hidden'
         )}
       >
         {/* ============================= HEADER (compact) ============================= */}
-        <div className="relative flex items-center gap-3 px-5 py-4 border-b border-border/60 bg-background">
+        <div className="relative flex items-center gap-3 px-4 py-3.5 border-b border-border/60 bg-background">
           {/* Trait orange signature */}
           <span className="absolute left-0 top-0 h-full w-[3px] bg-[#FF6600]" />
 
@@ -630,10 +1138,10 @@ export function RequestOrderModal({
           )}
 
           <div className="flex-1 min-w-0 pr-8">
-            <DialogTitle className="truncate text-[15px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
+            <DialogTitle className="truncate text-[14px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
               {service ? service.name : 'Nouvelle demande'}
             </DialogTitle>
-            <p className="mt-0.5 truncate text-[11.5px] text-muted-foreground">
+            <p className="mt-0.5 truncate text-[10.5px] text-muted-foreground">
               {service
                 ? getServiceDescription(service.name)
                 : 'Décrivez votre besoin, recevez des propositions.'}
@@ -644,7 +1152,7 @@ export function RequestOrderModal({
             type="button"
             onClick={handleClose}
             aria-label="Fermer"
-            className="absolute right-3 top-3.5 flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+            className="absolute flex items-center justify-center transition-colors -translate-y-1/2 rounded-full right-3 top-1/2 h-7 w-7 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
           >
             <X className="h-3.5 w-3.5" strokeWidth={2} />
           </button>
@@ -652,8 +1160,8 @@ export function RequestOrderModal({
 
         {/* ============================= BODY ============================= */}
         {!session ? (
-          <div className="p-5 space-y-4 text-center">
-            <p className="text-[13px] leading-relaxed text-muted-foreground">
+          <div className="p-4 space-y-3 text-center">
+            <p className="text-[12.5px] leading-relaxed text-muted-foreground">
               Pour envoyer une demande, créez un compte ou connectez-vous.
             </p>
             <div className="flex flex-col gap-2">
@@ -680,12 +1188,12 @@ export function RequestOrderModal({
           <form
             ref={formRef}
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-3.5 p-5"
+            className="space-y-3.5 px-4 py-4"
             style={{ fontSize: '16px' }}
           >
             {/* Service (si non pré-sélectionné) */}
             {!service && (
-              <div>
+              <div className="min-w-0">
                 <FieldLabel>Service</FieldLabel>
                 <FormSearchableSelect
                   control={control}
@@ -700,8 +1208,8 @@ export function RequestOrderModal({
             {service && <input type="hidden" {...register('service_id')} />}
 
             {/* Nom + Téléphone */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="min-w-0">
                 <FieldLabel>Nom</FieldLabel>
                 <Input
                   {...register('name')}
@@ -711,7 +1219,7 @@ export function RequestOrderModal({
                 />
                 <FieldError message={errors.name?.message} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <FieldLabel>Téléphone</FieldLabel>
                 <Input
                   {...register('phone')}
@@ -725,9 +1233,9 @@ export function RequestOrderModal({
               </div>
             </div>
 
-            {/* Zone + Commune */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
+            {/* Zone + Quartier */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="min-w-0">
                 <FieldLabel>Zone</FieldLabel>
                 <FormSearchableSelect
                   control={control}
@@ -738,7 +1246,7 @@ export function RequestOrderModal({
                 />
                 <FieldError message={errors.zone_id?.message} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <FieldLabel>Quartier</FieldLabel>
                 <Input
                   {...register('quartier')}
@@ -751,10 +1259,10 @@ export function RequestOrderModal({
             </div>
 
             {/* Description */}
-            <div>
+            <div className="min-w-0">
               <div className="flex items-baseline justify-between mb-1">
                 <FieldLabel>Décrivez votre besoin</FieldLabel>
-                <span className="text-[10.5px] tabular-nums text-muted-foreground/50">
+                <span className="text-[10px] tabular-nums text-muted-foreground/50">
                   {descriptionValue.length}
                 </span>
               </div>
@@ -764,7 +1272,7 @@ export function RequestOrderModal({
                 placeholder="Ex : Fuite sous l'évier, urgente, 3e étage…"
                 className={cn(
                   'w-full resize-none rounded-lg border border-border/60 bg-muted/20 px-3 py-2',
-                  'text-[13.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
+                  'text-[12.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
                   'transition-all duration-200',
                   'focus:border-[#FF6600]/50 focus:outline-none focus:ring-2 focus:ring-[#FF6600]/15'
                 )}
@@ -774,7 +1282,7 @@ export function RequestOrderModal({
             </div>
 
             {/* Photo compacte */}
-            <div>
+            <div className="min-w-0">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -798,15 +1306,15 @@ export function RequestOrderModal({
                     className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors group-hover:text-[#FF6600]"
                     strokeWidth={1.75}
                   />
-                  <span className="flex-1 text-[12.5px] text-muted-foreground">
+                  <span className="flex-1 min-w-0 truncate text-[12px] text-muted-foreground">
                     Ajouter une photo
                   </span>
-                  <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground/50">
+                  <span className="shrink-0 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">
                     Optionnel
                   </span>
                 </button>
               ) : (
-                <div className="relative overflow-hidden border rounded-lg border-border/70 bg-muted/20">
+                <div className="relative w-full overflow-hidden border rounded-lg border-border/70 bg-muted/20">
                   <img
                     src={preview}
                     alt="Aperçu"
@@ -838,11 +1346,11 @@ export function RequestOrderModal({
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
-                    <span className="text-[13px] font-medium">Envoi…</span>
+                    <span className="text-[12.5px] font-medium">Envoi…</span>
                   </>
                 ) : (
                   <>
-                    <span className="text-[13px] font-medium">Envoyer</span>
+                    <span className="text-[12.5px] font-medium">Envoyer</span>
                     <ArrowRight
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
                       strokeWidth={2}
@@ -851,7 +1359,7 @@ export function RequestOrderModal({
                 )}
               </Button>
 
-              <p className="flex items-center justify-center gap-1.5 text-[10.5px] text-muted-foreground">
+              <p className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
                 <ShieldCheck className="w-3 h-3" strokeWidth={1.75} />
                 Sécurisé · Sans engagement
               </p>
@@ -864,7 +1372,7 @@ export function RequestOrderModal({
           <DialogContent
             className={cn(
               'gap-0 overflow-hidden rounded-2xl border border-border/70 p-0 shadow-2xl',
-              'sm:max-w-2xl'
+              'w-[calc(100vw-1.5rem)] max-w-[22rem] sm:w-full sm:max-w-2xl'
             )}
           >
             {imageModalUrl && (

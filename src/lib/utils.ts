@@ -26,7 +26,7 @@ export function generateWhatsAppLink(phone: string, message: string) {
   return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
 }
 
-export const WHATSAPP_URGENCY_PHONE = '0123456789';
+export const WHATSAPP_URGENCY_PHONE = '0143344342';
 
 export function getUrgencyWhatsAppLink() {
   return generateWhatsAppLink(

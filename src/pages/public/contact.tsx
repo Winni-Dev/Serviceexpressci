@@ -17,7 +17,7 @@ export function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { icon: Phone, title: 'Téléphone', value: '+225 01 23 45 67 89' },
+              { icon: Phone, title: 'Téléphone', value: '+225 01 43 34 43 42' },
               { icon: Mail, title: 'Email', value: 'contact@serviceexpress.ci' },
               { icon: MapPin, title: 'Adresse', value: "Abidjan, Côte d'Ivoire" },
             ].map((item) => (
@@ -36,7 +36,7 @@ export function ContactPage() {
 
           <div className="text-center mt-12">
             <Button size="lg" className="rounded-xl" asChild>
-              <a href="tel:+2250123456789">
+              <a href="tel:+2250143344342">
                 <Phone className="w-4 h-4 mr-2" />
                 Appeler maintenant
               </a>
