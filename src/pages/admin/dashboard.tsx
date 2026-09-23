@@ -402,8 +402,11 @@ export function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* KPI Cards */}
-      <motion.div variants={itemVariants} className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      {/* KPI Cards — scroll mobile, grille desktop */}
+      <motion.div
+        variants={itemVariants}
+        className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-1 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 xl:grid-cols-6 lg:gap-4 lg:overflow-visible lg:pb-0"
+      >
         <StatCard title="Total demandes" value={analytics.totalRequests} icon={ClipboardList} accent="blue" trend={analytics.growth} trendLabel="vs sem. passée" delay={0} />
         <StatCard title="Nouvelles" value={analytics.newRequests} icon={AlertCircle} accent="amber" delay={0.05} />
         <StatCard title="En cours" value={analytics.inProgress} icon={Clock} accent="orange" delay={0.1} />

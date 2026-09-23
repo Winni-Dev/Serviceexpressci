@@ -513,6 +513,9 @@ import { getAvatarUrl } from '@/lib/utils';
 import { uploadStaffPhoto } from '@/lib/storage';
 import { useConfirm } from '@/contexts/confirm-context';
 import { getErrorMessage } from '@/lib/auth';
+import { getWorkerRatingStatsMap } from '@/services/api';
+import { WorkerBadgeCard } from '@/components/shared/worker-badge-card';
+import { useQuery } from '@tanstack/react-query';
 import {
   Plus,
   User,
@@ -567,6 +570,13 @@ export function WorkersPage() {
   const updateStatus = useUpdateWorkerStatus();
   const deleteWorker = useDeleteWorker();
   const { confirm } = useConfirm();
+
+  const workerIds = useMemo(() => workers?.map((w) => w.id) ?? [], [workers]);
+  const { data: ratingsMap } = useQuery({
+    queryKey: ['admin-worker-ratings', workerIds],
+    queryFn: () => getWorkerRatingStatsMap(workerIds),
+    enabled: workerIds.length > 0,
+  });
 
   const displayZones = isZoneManager
     ? zones?.filter((z) => z.id === profile?.zone_id)
@@ -888,73 +898,83 @@ export function WorkersPage() {
         {filteredWorkers?.length === 0 ? (
           <EmptyState icon={Users} message="Aucun travailleur trouvé" />
         ) : (
-          filteredWorkers?.map((worker) => (
-            <EntityCard key={worker.id} inactive={worker.status === 'inactive'}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <img
-                    src={worker.photo_url || getAvatarUrl(worker.gender)}
-                    alt={worker.name}
-                    className="w-12 h-12 rounded-xl object-cover ring-2 ring-gray-100 shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-[#0A2240] truncate">{worker.name}</h3>
-                    <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                      <Badge variant={worker.status === 'active' ? 'default' : 'secondary'}>
-                        {worker.status === 'active' ? 'Actif' : 'Inactif'}
-                      </Badge>
-                      <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {formatCardDate(worker.created_at)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-1 shrink-0">
-                  <Button variant="outline" size="sm" className="rounded-lg h-8 w-8 p-0" onClick={() => setDetailWorker(worker)}>
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  {/* Seul le super_admin peut modifier */}
-                  {isSuperAdmin && (
-                    <Button variant="outline" size="sm" className="rounded-lg h-8 w-8 p-0" onClick={() => openEdit(worker)}>
-                      <Pencil className="w-4 h-4" />
+          filteredWorkers?.map((worker) => {
+            const stats = ratingsMap?.get(worker.id);
+            const zoneName =
+              worker.worker_zones?.map((z: { zones?: { name?: string } }) => z.zones?.name).filter(Boolean).join(', ') ||
+              worker.zones?.name;
+            return (
+              <WorkerBadgeCard
+                key={worker.id}
+                name={worker.name}
+                phone={worker.phone}
+                photoUrl={worker.photo_url}
+                gender={worker.gender}
+                serviceName={worker.services?.name}
+                zoneName={zoneName}
+                status={worker.status}
+                avgRating={Number(stats?.avg_rating ?? 0)}
+                ratingCount={Number(stats?.rating_count ?? 0)}
+                className={worker.status === 'inactive' ? 'opacity-60' : ''}
+                actions={
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-lg h-8 w-8 p-0"
+                      onClick={() => setDetailWorker(worker)}
+                    >
+                      <Eye className="w-4 h-4" />
                     </Button>
-                  )}
-                  {/* Seul le super_admin peut supprimer */}
-                  {isSuperAdmin && (
-                    <Button variant="outline" size="sm" className="rounded-lg h-8 w-8 p-0" onClick={() => handleDelete(worker.id)}>
-                      <Trash2 className="w-4 h-4 text-red-400" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2 text-gray-500"><Phone className="w-4 h-4 text-gray-400 shrink-0" /><span>{worker.phone}</span></div>
-                <div className="flex items-center gap-2 text-gray-500"><MapPin className="w-4 h-4 text-gray-400 shrink-0" /><span>{worker.zones?.name}</span></div>
-                <div className="flex items-center gap-2 text-gray-500"><Briefcase className="w-4 h-4 text-gray-400 shrink-0" /><span>{worker.services?.name}</span></div>
-              </div>
-              <div className="flex gap-2 mt-4">
-                {/* Seul le super_admin peut activer/désactiver */}
-                {isSuperAdmin ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 rounded-xl"
-                    onClick={() => handleToggleStatus(worker.id, worker.status)}
-                  >
-                    {worker.status === 'active'
-                      ? <><UserX className="w-4 h-4 mr-1" />Désactiver</>
-                      : <><UserCheck className="w-4 h-4 mr-1" />Activer</>}
-                  </Button>
-                ) : (
-                  <div className="flex-1 text-center text-xs text-gray-400 bg-gray-50 rounded-xl py-1.5 px-3 flex items-center justify-center gap-2">
-                    <Shield className="w-3 h-3" />
-                    Action réservée à l'administrateur
+                    {isSuperAdmin && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-lg h-8 w-8 p-0"
+                          onClick={() => openEdit(worker)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-lg h-8 w-8 p-0"
+                          onClick={() => handleDelete(worker.id)}
+                        >
+                          <Trash2 className="w-4 h-4 text-red-400" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 rounded-xl"
+                          onClick={() => handleToggleStatus(worker.id, worker.status)}
+                        >
+                          {worker.status === 'active' ? (
+                            <>
+                              <UserX className="w-4 h-4 mr-1" />
+                              Désactiver
+                            </>
+                          ) : (
+                            <>
+                              <UserCheck className="w-4 h-4 mr-1" />
+                              Activer
+                            </>
+                          )}
+                        </Button>
+                      </>
+                    )}
+                    {!isSuperAdmin && (
+                      <div className="flex-1 text-center text-xs text-gray-400 bg-gray-50 rounded-xl py-1.5 px-3 flex items-center justify-center gap-2">
+                        <Shield className="w-3 h-3" />
+                        Réservé admin
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </EntityCard>
-          ))
+                }
+              />
+            );
+          })
         )}
       </div>
 

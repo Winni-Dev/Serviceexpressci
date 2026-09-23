@@ -19,7 +19,10 @@ export function useCreateRequest() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createRequest,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['requests'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
+      queryClient.invalidateQueries({ queryKey: ['my-requests'] });
+    },
   });
 }
 

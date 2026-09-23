@@ -31,6 +31,9 @@ export function formatFcfa(amount: number): string {
 }
 
 export function getRecordProfit(record: Attendance): number {
+  if (record.levy_amount != null && Number(record.levy_amount) > 0) {
+    return Number(record.levy_amount);
+  }
   return (record.total_received ?? 0) - record.amount;
 }
 

@@ -11,8 +11,8 @@ interface BrandLogoProps {
 }
 
 const sizeMap = {
-  sm: 'w-8 h-8',
-  md: 'w-10 h-10',
+  sm: 'w-9 h-9',
+  md: 'w-11 h-11',
   lg: 'w-14 h-14',
 };
 
@@ -27,9 +27,12 @@ export function BrandLogo({
   const content = (
     <div className={cn('flex items-center gap-2.5', className)} onClick={onClick}>
       <img
-        src="/favicon.png"
+        src="/favicon.jpeg"
         alt="Service Express CI"
-        className={cn(sizeMap[size], 'rounded-lg object-contain shrink-0')}
+        className={cn(
+          sizeMap[size],
+          'rounded-xl object-cover shrink-0 ring-1 ring-black/5 shadow-sm'
+        )}
       />
       {showText && (
         <span className={cn('font-bold tracking-tight leading-tight', textClassName)}>

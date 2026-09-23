@@ -148,12 +148,16 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  BadgeCheck,
+  Contact,
+  FolderOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/auth-context';
 import { useConfirm } from '@/contexts/confirm-context';
 import { BrandLogo } from '@/components/shared/brand-logo';
+import { RefreshDataButton } from '@/components/shared/refresh-data-button';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Role } from '@/types';
 
@@ -161,17 +165,23 @@ const allNavigation: { name: string; href: string; icon: typeof LayoutDashboard;
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, roles: ['super_admin', 'zone_manager'] },
   { name: 'Demandes', href: '/admin/requests', icon: ClipboardList, roles: ['super_admin', 'zone_manager'] },
   { name: 'Travailleurs', href: '/admin/workers', icon: Users, roles: ['super_admin', 'zone_manager'] },
-  { name: 'Chefs de zone', href: '/admin/managers', icon: UserCheck, roles: ['super_admin'] },
+  { name: 'Utilisateurs', href: '/admin/users', icon: Contact, roles: ['super_admin'] },
+  { name: 'Demandes de rôle', href: '/admin/role-requests', icon: BadgeCheck, roles: ['super_admin'] },
+  { name: 'Partenaires', href: '/admin/managers', icon: UserCheck, roles: ['super_admin'] },
   { name: 'Comptables', href: '/admin/accountants', icon: Calculator, roles: ['super_admin'] },
   { name: 'Zones', href: '/admin/zones', icon: MapPin, roles: ['super_admin'] },
   { name: 'Services', href: '/admin/services', icon: Wrench, roles: ['super_admin'] },
+  { name: 'Catégories', href: '/admin/categories', icon: FolderOpen, roles: ['super_admin'] },
   { name: 'Comptabilité', href: '/admin/accounting', icon: DollarSign, roles: ['super_admin', 'accountant'] },
 ];
 
 const roleLabels: Record<Role, string> = {
   super_admin: 'Super Admin',
-  zone_manager: 'Chef de zone',
+  zone_manager: 'Partenaire',
   accountant: 'Comptable',
+  client: 'Client',
+  partner: 'Partenaire',
+  worker: 'Travailleur',
 };
 
 export function AdminLayout() {
@@ -295,9 +305,9 @@ export function AdminLayout() {
           {isCollapsed ? (
             <Link to={navigation[0]?.href || '/admin'} className="flex items-center justify-center">
               <img 
-                src="/favicon.png" 
+                src="/favicon.jpeg" 
                 alt="Service Express CI" 
-                className="w-10 h-10 object-contain"
+                className="w-10 h-10 object-cover rounded-xl"
               />
             </Link>
           ) : (
@@ -370,7 +380,6 @@ export function AdminLayout() {
         <header className="sticky top-4 z-30 bg-white/70 backdrop-blur-xl border border-white/20 rounded-2xl shadow-sm">
           <div className="flex items-center justify-between h-14 px-4 md:px-6">
             <div className="flex items-center gap-3">
-              {/* Bouton menu visible sur mobile et tablette */}
               <button 
                 className="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors" 
                 onClick={() => setIsMobileOpen(true)}
@@ -387,6 +396,7 @@ export function AdminLayout() {
             </div>
 
             <div className="flex items-center gap-3">
+              <RefreshDataButton variant="outline" label="Rafraîchir" />
               <div className="hidden md:flex items-center gap-2 text-sm">
                 <span className="text-gray-400">Connecté</span>
                 <span className="font-medium text-[#0A2240]">{session?.user?.email}</span>

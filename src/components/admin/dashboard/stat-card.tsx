@@ -10,6 +10,7 @@ interface StatCardProps {
   trendLabel?: string;
   accent?: 'orange' | 'blue' | 'green' | 'amber' | 'purple' | 'red';
   delay?: number;
+  className?: string;
 }
 
 const accents = {
@@ -29,6 +30,7 @@ export function StatCard({
   trendLabel,
   accent = 'orange',
   delay = 0,
+  className,
 }: StatCardProps) {
   const style = accents[accent];
   const isPositive = trend !== undefined && trend >= 0;
@@ -40,7 +42,9 @@ export function StatCard({
       transition={{ duration: 0.4, delay }}
       className={cn(
         'relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm ring-1',
-        style.ring
+        'snap-start shrink-0 w-[min(220px,75vw)] sm:w-[200px] lg:w-auto lg:min-w-0 lg:shrink',
+        style.ring,
+        className
       )}
     >
       <div className={cn('absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-60', style.bg)} />

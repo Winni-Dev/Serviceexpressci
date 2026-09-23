@@ -2,12 +2,14 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth-context';
 import { Loader2 } from 'lucide-react';
 import type { Role } from '@/types';
+import { getHomeForRole } from '@/lib/auth';
 
 interface RoleRouteProps {
   allowedRoles: Role[];
+  redirectTo?: string;
 }
 
-export function RoleRoute({ allowedRoles }: RoleRouteProps) {
+export function RoleRoute({ allowedRoles, redirectTo }: RoleRouteProps) {
   const { profile, loading } = useAuth();
 
   if (loading) {
@@ -19,12 +21,7 @@ export function RoleRoute({ allowedRoles }: RoleRouteProps) {
   }
 
   if (!profile || !allowedRoles.includes(profile.role)) {
-    const redirect =
-      profile?.role === 'accountant'
-        ? '/admin/accounting'
-        : profile?.role === 'zone_manager'
-          ? '/admin/requests'
-          : '/admin';
+    const redirect = redirectTo ?? getHomeForRole(profile?.role);
     return <Navigate to={redirect} replace />;
   }
 

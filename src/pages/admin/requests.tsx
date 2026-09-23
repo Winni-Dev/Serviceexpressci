@@ -344,6 +344,7 @@
 
 
 import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -364,6 +365,7 @@ import { useZones } from '@/hooks/useZones';
 import { Search, Eye, ClipboardList, X, User, Phone, MapPin, Briefcase, FileText, UserX } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { getRequestPriceAdjustments } from '@/services/api';
 import type { Request } from '@/types';
 
 const statusColors: Record<string, string> = {
@@ -401,6 +403,13 @@ export function RequestsPage() {
   const { data: workers } = useWorkers();
   const { data: zones } = useZones();
   const updateStatus = useUpdateRequestStatus();
+  const { data: requestAdjustments = [] } = useQuery({
+    queryKey: ['request-adjustments', detailRequest?.id],
+    queryFn: () => (detailRequest?.id ? getRequestPriceAdjustments(detailRequest.id) : Promise.resolve([])),
+    enabled: !!detailRequest?.id,
+  });
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageModalUrl, setImageModalUrl] = useState<string | null>(null);
 
   const communeOptions = useMemo(() => {
     const communes = [...new Set(requests?.map((r) => r.quartier).filter(Boolean))].sort();
@@ -664,6 +673,14 @@ export function RequestsPage() {
                 { label: 'Zone', value: activeRequest.zones?.name ?? '', icon: MapPin },
                 { label: 'Commune', value: activeRequest.quartier, icon: MapPin },
                 { label: 'Travailleur', value: activeRequest.workers?.name ?? 'Non assigné', icon: User },
+                {
+                  label: 'Prix convenu',
+                  value:
+                    activeRequest.price != null
+                      ? `${Number(activeRequest.price).toLocaleString('fr-FR')} FCFA`
+                      : '—',
+                  icon: Briefcase,
+                },
               ].map((field) => (
                 <div key={field.label} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2">
                   <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shrink-0 shadow-sm">
@@ -681,7 +698,40 @@ export function RequestsPage() {
                   <p className="text-[10px] text-gray-400 uppercase tracking-wide">Description</p>
                 </div>
                 <p className="text-sm text-[#0A2240] leading-relaxed">{activeRequest.description}</p>
+                {activeRequest.photo_url && (
+                  <div className="mt-2">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wide">Photo jointe</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageModalUrl(activeRequest.photo_url ?? null);
+                        setImageModalOpen(true);
+                      }}
+                      className="inline-block rounded-lg overflow-hidden border transition-transform duration-200 hover:scale-105 mt-1"
+                    >
+                      <img src={activeRequest.photo_url} alt="Demande" className="max-h-48 w-auto block" />
+                    </button>
+                  </div>
+                )}
               </div>
+
+              {requestAdjustments.length > 0 && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-2">Modifications de prix</p>
+                  {requestAdjustments.map((adj) => (
+                    <div key={adj.id} className="rounded-lg bg-white p-2 border border-amber-100 mb-2 last:mb-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-xs font-medium text-[#0A2240]">{adj.status === 'pending' ? 'En attente' : adj.status === 'approved' ? 'Accepté' : 'Refusé'}</span>
+                        <span className="text-[10px] text-gray-500">{format(new Date(adj.created_at), 'dd MMM yyyy', { locale: fr })}</span>
+                      </div>
+                      <p className="text-xs text-gray-600">Ancien prix : {Number(adj.previous_price).toLocaleString('fr-FR')} FCFA</p>
+                      <p className="text-xs text-gray-600">Supplément : {Number(adj.extra_price).toLocaleString('fr-FR')} FCFA</p>
+                      <p className="text-xs text-gray-600">Nouveau total : {Number(adj.new_total).toLocaleString('fr-FR')} FCFA</p>
+                      {adj.reason && <p className="text-xs text-gray-500 mt-1">Motif : {adj.reason}</p>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="p-4 pt-0 border-t border-gray-200 bg-gray-50 space-y-2 rounded-b-2xl">
@@ -735,6 +785,15 @@ export function RequestsPage() {
           </ScrollableDialogContent>
         </Dialog>
       )}
+      <Dialog open={imageModalOpen} onOpenChange={(v) => setImageModalOpen(v)}>
+        <ScrollableDialogContent className="sm:max-w-3xl rounded-2xl p-0">
+          {imageModalUrl && (
+            <div className="bg-black/90 p-4 flex justify-center">
+              <img src={imageModalUrl} alt="Grande vue" className="max-h-[80vh] w-auto rounded" />
+            </div>
+          )}
+        </ScrollableDialogContent>
+      </Dialog>
     </div>
   );
 }

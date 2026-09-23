@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/table';
 import { PageHeader, AdminCard, FilterBar, PageLoading } from '@/components/admin/page-shell';
 import { StatCard } from '@/components/admin/dashboard/stat-card';
-import { useAttendance, useCreateAttendance } from '@/hooks/useAttendance';
+import { useAttendance, useCreateAttendance, useApplyLevy, usePayAttendance } from '@/hooks/useAttendance';
 import { useWorkers } from '@/hooks/useWorkers';
 import {
   Plus,
@@ -31,10 +31,14 @@ import {
   Search,
   Receipt,
   PiggyBank,
+  Percent,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { useConfirm } from '@/contexts/confirm-context';
+import { getErrorMessage } from '@/lib/auth';
+import type { Attendance } from '@/types';
 import {
   computeTotals,
   filterByPeriod,
@@ -71,10 +75,15 @@ export function AccountingPage() {
   const [dateTo, setDateTo] = useState('');
   const [workerFilter, setWorkerFilter] = useState('');
   const [workerSearch, setWorkerSearch] = useState('');
+  const [levyTarget, setLevyTarget] = useState<Attendance | null>(null);
+  const [levyAmount, setLevyAmount] = useState('');
 
   const { data: attendance, isLoading } = useAttendance();
   const { data: workers } = useWorkers();
   const createAttendance = useCreateAttendance();
+  const applyLevy = useApplyLevy();
+  const payAttendance = usePayAttendance();
+  const { alert } = useConfirm();
 
   const workerOptions =
     workers?.map((w) => ({
@@ -442,9 +451,10 @@ export function AccountingPage() {
 
       <AdminCard padding={false} className="overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-[#0A2240]">Historique des pointages</h2>
+          <h2 className="font-semibold text-[#0A2240]">Pointages (auto + manuels)</h2>
           <p className="text-sm text-gray-400 mt-0.5">
-            {filteredRecords.length} enregistrement(s) — {getPeriodLabel(periodFilter)}
+            À la fin d'une mission, un pointage est créé automatiquement. Bénéfice = 0 jusqu'au
+            prélèvement.
           </p>
         </div>
         <div className="overflow-x-auto">
@@ -453,32 +463,46 @@ export function AccountingPage() {
               <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
                 <TableHead>Date</TableHead>
                 <TableHead>Travailleur</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead>Client / mission</TableHead>
                 <TableHead className="text-right">Reçu client</TableHead>
-                <TableHead className="text-right">Payé travailleur</TableHead>
+                <TableHead className="text-right">Part travailleur</TableHead>
                 <TableHead className="text-right">Bénéfice</TableHead>
+                <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredRecords.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-16 text-gray-400 text-sm">
+                  <TableCell colSpan={7} className="text-center py-16 text-gray-400 text-sm">
                     Aucun pointage pour cette période
                   </TableCell>
                 </TableRow>
               ) : (
                 filteredRecords.map((record) => {
                   const profit = getRecordProfit(record);
+                  const hasLevy = Number(record.levy_amount || 0) > 0;
                   return (
                     <TableRow key={record.id} className="hover:bg-gray-50/50">
                       <TableCell className="text-sm whitespace-nowrap">
                         {format(new Date(record.date), 'dd MMM yyyy', { locale: fr })}
                       </TableCell>
                       <TableCell className="text-sm font-medium text-[#0A2240]">
-                        {record.workers?.name}
+                        <div className="flex items-center gap-2">
+                          {record.workers?.photo_url ? (
+                            <img
+                              src={record.workers.photo_url}
+                              alt=""
+                              className="w-8 h-8 rounded-lg object-cover"
+                            />
+                          ) : null}
+                          {record.workers?.name}
+                        </div>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-500 max-w-[200px] truncate">
-                        {record.description}
+                      <TableCell className="text-sm text-gray-500 max-w-[220px]">
+                        <p className="font-medium text-gray-700 truncate">
+                          {record.client_name || '—'}
+                        </p>
+                        <p className="text-xs truncate">{record.description}</p>
                       </TableCell>
                       <TableCell className="text-right text-sm font-medium text-blue-700">
                         {formatFcfa(record.total_received ?? 0)}
@@ -489,10 +513,54 @@ export function AccountingPage() {
                       <TableCell
                         className={cn(
                           'text-right text-sm font-semibold',
-                          profit >= 0 ? 'text-emerald-600' : 'text-red-600'
+                          profit > 0 ? 'text-emerald-600' : 'text-gray-400'
                         )}
                       >
                         {formatFcfa(profit)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="rounded-xl"
+                            onClick={() => {
+                              setLevyTarget(record);
+                              setLevyAmount(
+                                hasLevy
+                                  ? String(record.levy_amount)
+                                  : String(Math.round(Number(record.total_received || 0) * 0.2))
+                              );
+                            }}
+                          >
+                            <Percent className="w-3.5 h-3.5 mr-1" />
+                            {hasLevy ? 'Modifier' : 'Prélever'}
+                          </Button>
+
+                          {!record.paid ? (
+                            <Button
+                              size="sm"
+                              className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
+                              disabled={payAttendance.isPending}
+                              onClick={async () => {
+                                try {
+                                  await payAttendance.mutateAsync({ id: record.id, amount: record.amount });
+                                  await alert({
+                                    title: 'Paiement enregistré',
+                                    description: 'Le travailleur a été marqué comme payé.',
+                                    variant: 'success',
+                                  });
+                                } catch (e) {
+                                  await alert({ title: 'Erreur', description: getErrorMessage(e), variant: 'error' });
+                                }
+                              }}
+                            >
+                              Payer
+                            </Button>
+                          ) : (
+                            <span className="text-xs text-emerald-600">Payé</span>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -502,6 +570,85 @@ export function AccountingPage() {
           </Table>
         </div>
       </AdminCard>
+
+      <Dialog open={!!levyTarget} onOpenChange={(o) => !o && setLevyTarget(null)}>
+        <ScrollableDialogContent className="sm:max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>Prélèvement bénéfice</DialogTitle>
+          </DialogHeader>
+          {levyTarget && (
+            <div className="space-y-4 pt-2">
+              <div className="rounded-xl bg-gray-50 p-4 text-sm space-y-1">
+                <p>
+                  <span className="text-gray-500">Travailleur :</span>{' '}
+                  <strong>{levyTarget.workers?.name}</strong>
+                </p>
+                <p>
+                  <span className="text-gray-500">Client :</span>{' '}
+                  {levyTarget.client_name || '—'}
+                </p>
+                <p>
+                  <span className="text-gray-500">Reçu client :</span>{' '}
+                  {formatFcfa(Number(levyTarget.total_received || 0))}
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Montant du prélèvement (FCFA)</label>
+                <Input
+                  type="number"
+                  min={0}
+                  max={Number(levyTarget.total_received || 0)}
+                  value={levyAmount}
+                  onChange={(e) => setLevyAmount(e.target.value)}
+                  className="rounded-xl mt-1"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Part travailleur après prélèvement :{' '}
+                  {formatFcfa(
+                    Math.max(
+                      0,
+                      Number(levyTarget.total_received || 0) - (parseFloat(levyAmount) || 0)
+                    )
+                  )}
+                </p>
+              </div>
+              <Button
+                className="w-full rounded-xl bg-[#0A2240] hover:bg-[#0d2d52]"
+                disabled={applyLevy.isPending}
+                onClick={async () => {
+                  const levy = parseFloat(levyAmount);
+                  if (Number.isNaN(levy) || levy < 0) {
+                    await alert({
+                      title: 'Montant invalide',
+                      description: 'Entrez un prélèvement valide.',
+                      variant: 'error',
+                    });
+                    return;
+                  }
+                  try {
+                    await applyLevy.mutateAsync({ id: levyTarget.id, levy });
+                    setLevyTarget(null);
+                    await alert({
+                      title: 'Prélèvement enregistré',
+                      description:
+                        'Le bénéfice est mis à jour. La part du travailleur diminue dans son espace.',
+                      variant: 'success',
+                    });
+                  } catch (e) {
+                    await alert({
+                      title: 'Erreur',
+                      description: getErrorMessage(e),
+                      variant: 'error',
+                    });
+                  }
+                }}
+              >
+                Confirmer le prélèvement
+              </Button>
+            </div>
+          )}
+        </ScrollableDialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -6,7 +6,7 @@
 // import { useEffect, useRef, useState } from 'react';
 // import { ServiceList } from '@/components/public/service-list';
 // import { useRequestModal } from '@/contexts/request-modal-context';
-// import IMGACC from '@/IMAGES/imgacc.png';
+// import IMGACC from '@/IMAGES/imageac.jpeg';
 
 // const features = [
 //   { icon: Shield, title: 'Artisans vérifiés', description: 'Tous nos artisans sont vérifiés et expérimentés' },
@@ -308,9 +308,9 @@ import { Button } from '@/components/ui/button';
 import { Shield, Clock, Star, ChevronRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { ServiceList } from '@/components/public/service-list';
+import { HomeServicesSections } from '@/components/public/home-services-sections';
 import { useRequestModal } from '@/contexts/request-modal-context';
-import IMGACC from '@/IMAGES/imgacc.png';
+import IMGACC from '@/IMAGES/imageacc.jpeg';
 
 const features = [
   { icon: Shield, title: 'Artisans vérifiés', description: 'Tous nos artisans sont vérifiés et expérimentés' },
@@ -571,22 +571,10 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Section Nos services */}
+      {/* Section Nos services + catégories */}
       <section className="py-16 md:py-20 bg-[#f8f9fb]">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-10"
-          >
-            <span className="text-[#FF6600] font-semibold text-xs uppercase tracking-wider">Nos prestations</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#0A2240] mt-1 mb-2">Nos services</h2>
-            <div className="w-12 h-0.5 bg-[#FF6600] mx-auto rounded-full" />
-            <p className="text-gray-500 text-sm max-w-xl mx-auto mt-3">
-              Choisissez un service et commandez en quelques clics
-            </p>
-          </motion.div>
-          <ServiceList limit={6} showSearch showVoirPlus variant="compact" />
+          <HomeServicesSections />
         </div>
       </section>
 
@@ -635,18 +623,26 @@ export function HomePage() {
           >
             <h2 className="text-2xl md:text-3xl font-bold mb-2">Besoin d'un service urgent ?</h2>
             <p className="text-white/80 mb-6 max-w-lg mx-auto text-sm">
-              Contactez-nous maintenant et obtenez une intervention rapide
+              Commandez en ligne ou ouvrez votre espace pour suivre vos demandes
             </p>
-            <Button
-              size="default"
-              className="rounded-xl bg-white text-[#FF6600] hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 group"
-              asChild
-            >
-              <Link to="/contact">
-                Nous contacter
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button
+                size="default"
+                className="rounded-xl bg-white text-[#FF6600] hover:bg-gray-100 shadow-lg group"
+                onClick={() => openRequest()}
+              >
+                Faire une demande
                 <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+              </Button>
+              <Button
+                size="default"
+                variant="outline"
+                className="rounded-xl border-white/40 bg-transparent text-white hover:bg-white/10"
+                asChild
+              >
+                <Link to="/services">Voir les services</Link>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>

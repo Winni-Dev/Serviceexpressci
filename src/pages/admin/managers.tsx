@@ -179,7 +179,7 @@ export function ManagersPage() {
 
   const handleDelete = async (id: string) => {
     const ok = await confirm({
-      title: 'Supprimer ce chef de zone ?',
+      title: 'Supprimer ce partenaire ?',
       description: 'Son compte de connexion sera désactivé. Cette action est irréversible.',
       confirmText: 'Supprimer',
       variant: 'danger',
@@ -210,8 +210,8 @@ export function ManagersPage() {
       <ErrorAlert message={errorMsg} />
 
       <PageHeader
-        title="Chefs de zone"
-        description="Comptes de connexion pour chaque chef de zone"
+        title="Partenaires"
+        description="Partenaires acceptés (candidatures) et comptes créés depuis l'admin."
         badge={managers?.length ?? 0}
         action={
           <Dialog
@@ -220,11 +220,11 @@ export function ManagersPage() {
           >
             <DialogTrigger asChild>
               <Button className="rounded-xl">
-                <Plus className="w-4 h-4 mr-2" />Ajouter un chef de zone
+                <Plus className="w-4 h-4 mr-2" />Ajouter un partenaire
               </Button>
             </DialogTrigger>
             <DialogContent className="rounded-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader><DialogTitle>Ajouter un chef de zone</DialogTitle></DialogHeader>
+              <DialogHeader><DialogTitle>Ajouter un partenaire</DialogTitle></DialogHeader>
               <form onSubmit={createForm.handleSubmit(onCreate)} className="space-y-4">
                 {errorMsg && isDialogOpen && <ErrorAlert message={errorMsg} />}
                 <PhotoUpload
@@ -233,7 +233,7 @@ export function ManagersPage() {
                 />
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">Nom complet</label>
-                  <Input {...createForm.register('name')} placeholder="Nom du chef de zone" className="rounded-xl" />
+                  <Input {...createForm.register('name')} placeholder="Nom du partenaire" className="rounded-xl" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">Email (connexion)</label>
@@ -278,7 +278,7 @@ export function ManagersPage() {
         }
       />
 
-      <FilterBar resultCount={filteredManagers?.length ?? 0} resultLabel="chef(s) de zone trouvé(s)">
+      <FilterBar resultCount={filteredManagers?.length ?? 0} resultLabel="partenaire(s) trouvé(s)">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
@@ -299,7 +299,7 @@ export function ManagersPage() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredManagers?.length === 0 ? (
-          <EmptyState icon={UserCheck} message="Aucun chef de zone trouvé" />
+          <EmptyState icon={UserCheck} message="Aucun partenaire trouvé" />
         ) : (
           filteredManagers?.map((manager) => (
             <EntityCard key={manager.id}>
@@ -314,7 +314,7 @@ export function ManagersPage() {
                     <h3 className="font-semibold text-[#0A2240] truncate">{manager.name}</h3>
                     <div className="flex flex-wrap items-center gap-1.5 mt-1">
                       <span className="inline-flex items-center gap-1 text-[10px] text-[#FF6600] font-medium bg-orange-50 px-2 py-0.5 rounded-full">
-                        <Shield className="w-3 h-3" />Chef de zone
+                        <Shield className="w-3 h-3" />partenaire
                       </span>
                       <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
@@ -347,7 +347,7 @@ export function ManagersPage() {
 
       <Dialog open={!!editingManager} onOpenChange={(open) => !open && resetEditState()}>
         <DialogContent className="rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Modifier le chef de zone</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Modifier le partenaire</DialogTitle></DialogHeader>
           <form onSubmit={editForm.handleSubmit(onEdit)} className="space-y-4">
             <PhotoUpload
               gender={editGender}
@@ -381,7 +381,7 @@ export function ManagersPage() {
           photoUrl={detailManager.photo_url}
           createdAt={detailManager.created_at}
           badge={{
-            label: 'Chef de zone',
+            label: 'partenaire',
             className: 'bg-orange-100 text-[#FF6600]',
           }}
           fields={[
