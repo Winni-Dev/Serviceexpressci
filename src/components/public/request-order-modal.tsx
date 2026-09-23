@@ -1138,10 +1138,10 @@ export function RequestOrderModal({
           )}
 
           <div className="flex-1 min-w-0 pr-8">
-            <DialogTitle className="truncate text-[14px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
+            <DialogTitle className="break-words text-[14px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
               {service ? service.name : 'Nouvelle demande'}
             </DialogTitle>
-            <p className="mt-0.5 truncate text-[10.5px] text-muted-foreground">
+            <p className="mt-0.5 break-words text-[10.5px] leading-relaxed text-muted-foreground">
               {service
                 ? getServiceDescription(service.name)
                 : 'Décrivez votre besoin, recevez des propositions.'}
@@ -1272,7 +1272,7 @@ export function RequestOrderModal({
                 placeholder="Ex : Fuite sous l'évier, urgente, 3e étage…"
                 className={cn(
                   'w-full resize-none rounded-lg border border-border/60 bg-muted/20 px-3 py-2',
-                  'text-[12.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
+                  'break-words whitespace-pre-wrap text-[12.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
                   'transition-all duration-200',
                   'focus:border-[#FF6600]/50 focus:outline-none focus:ring-2 focus:ring-[#FF6600]/15'
                 )}

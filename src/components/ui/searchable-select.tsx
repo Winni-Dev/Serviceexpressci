@@ -224,7 +224,7 @@ export function SearchableSelect({
         disabled={disabled}
         onClick={handleButtonClick}
         className={cn(
-          'flex h-10 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-left',
+          'flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-left',
           'focus:outline-none focus:ring-2 focus:ring-[#FF6600] focus:border-transparent',
           'disabled:cursor-not-allowed disabled:opacity-50',
           !selectedLabel && 'text-gray-400',
@@ -233,7 +233,9 @@ export function SearchableSelect({
         )}
         style={{ fontSize: '16px' }}
       >
-        <span className="truncate">{selectedLabel || placeholder}</span>
+        <span className="min-w-0 flex-1 break-words whitespace-normal text-left">
+          {selectedLabel || placeholder}
+        </span>
         <ChevronDown className={cn('h-4 w-4 shrink-0 opacity-50 transition-transform', open && 'rotate-180')} />
       </button>
 
@@ -272,7 +274,9 @@ export function SearchableSelect({
                     )}
                   >
                     <Check className={cn('w-4 h-4 shrink-0', value === option.value ? 'opacity-100' : 'opacity-0')} />
-                    <span className="truncate">{option.label}</span>
+                    <span className="min-w-0 flex-1 break-words whitespace-normal text-left">
+                      {option.label}
+                    </span>
                   </button>
                 </li>
               ))
