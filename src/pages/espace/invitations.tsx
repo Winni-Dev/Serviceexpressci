@@ -29,8 +29,8 @@ export function InvitationsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-[#0A2240]">Invitations</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Invitations</h1>
+        <p className="text-sm text-[#A0A0A0]">
           Acceptez ou refusez les invitations pour devenir travailleur chez un partenaire.
         </p>
       </div>
@@ -42,19 +42,19 @@ export function InvitationsPage() {
       )}
 
       {!isLoading && !data?.length && (
-        <div className="bg-white rounded-2xl border border-dashed p-8 text-center text-gray-500">
+        <div className="rounded-2xl border border-dashed border-[#2D2D2D] bg-[#141414] p-8 text-center text-[#A0A0A0]">
           Aucune invitation en attente.
         </div>
       )}
 
       <div className="space-y-3">
         {(data as WorkerInvitation[] | undefined)?.map((inv) => (
-          <div key={inv.id} className="bg-white rounded-2xl border p-4 flex flex-wrap items-center justify-between gap-3">
+          <div key={inv.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#2D2D2D] bg-[#141414] p-4 shadow-[0_16px_32px_rgba(0,0,0,0.14)]">
             <div>
-              <p className="font-medium text-[#0A2240]">
+              <p className="font-medium text-white">
                 Invitation travailleur — {inv.services?.name || 'Service'}
               </p>
-              <p className="text-sm text-gray-500">Téléphone : {inv.phone}</p>
+              <p className="text-sm text-[#A0A0A0]">Téléphone : {inv.phone}</p>
             </div>
             <div className="flex gap-2">
               <Button

@@ -158,27 +158,27 @@ export function ProfilePage() {
   return (
     <div className="max-w-xl space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-[#0A2240]">Mon profil</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Mon profil</h1>
+        <p className="text-sm text-[#A0A0A0]">
           Le métier et les zones définis par le partenaire s'affichent ici. Vous pouvez les modifier.
         </p>
       </div>
 
       {worker && (
-        <div className="bg-[#0A2240] text-white rounded-2xl p-4 space-y-2">
-          <p className="text-xs text-white/60 uppercase tracking-wide">Assigné par le partenaire</p>
+        <div className="rounded-2xl border border-[#3B82F6]/40 bg-[#3B82F6] p-4 text-white shadow-[0_16px_32px_rgba(59,130,246,0.22)] space-y-2">
+          <p className="text-[11px] uppercase tracking-[0.16em] text-white/80">Assigné par le partenaire</p>
           <div className="flex items-start gap-2">
-            <Briefcase className="w-4 h-4 mt-0.5 text-[#FF6600] shrink-0" />
+            <Briefcase className="mt-0.5 h-4 w-4 shrink-0 text-[#C27D3D]" />
             <div>
-              <p className="text-xs text-white/50">Métier / service</p>
-              <p className="font-semibold">{assignedServiceName}</p>
+              <p className="text-xs text-white/70">Métier / service</p>
+              <p className="font-semibold text-white">{assignedServiceName}</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <MapPin className="w-4 h-4 mt-0.5 text-[#FF6600] shrink-0" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#C27D3D]" />
             <div>
-              <p className="text-xs text-white/50">Zone(s)</p>
-              <p className="font-semibold">{assignedZones}</p>
+              <p className="text-xs text-white/70">Zone(s)</p>
+              <p className="font-semibold text-white">{assignedZones}</p>
             </div>
           </div>
           {stats && Number(stats.rating_count) > 0 && (
@@ -193,39 +193,39 @@ export function ProfilePage() {
         </div>
       )}
 
-      <div className="bg-white rounded-2xl border p-5 space-y-4">
+      <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 space-y-4 shadow-[0_16px_32px_rgba(0,0,0,0.2)]">
         <div className="flex items-center gap-4">
           {preview ? (
-            <img src={preview} alt="" className="w-20 h-20 rounded-full object-cover border" />
+            <img src={preview} alt="" className="h-20 w-20 rounded-full border border-[#2D2D2D] object-cover" />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-[#0A2240] text-white flex items-center justify-center text-2xl font-bold">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#1C1C1C] text-2xl font-bold text-white">
               {(profile?.name || '?').charAt(0)}
             </div>
           )}
           <div className="flex-1">
-            <label className="text-sm font-medium">Photo de profil *</label>
+            <label className="text-sm font-medium text-[#F5F5F5]">Photo de profil *</label>
             <Input
               type="file"
               accept="image/*"
-              className="rounded-xl mt-1"
+              className="mt-1 rounded-xl"
               onChange={(e) => {
                 const f = e.target.files?.[0] ?? null;
                 setPhotoFile(f);
                 if (f) setPreview(URL.createObjectURL(f));
               }}
             />
-            <p className="text-xs text-gray-400 mt-1">Puis cliquez sur Enregistrer</p>
+            <p className="mt-1 text-xs text-[#A0A0A0]">Puis cliquez sur Enregistrer</p>
           </div>
         </div>
 
         <div>
-          <label className="text-sm font-medium">Nom</label>
-          <Input {...form.register('name')} className="rounded-xl mt-1" />
+          <label className="text-sm font-medium text-[#F5F5F5]">Nom</label>
+          <Input {...form.register('name')} className="mt-1 rounded-xl" />
         </div>
 
         <div>
-          <label className="text-sm font-medium">Téléphone</label>
-          <Input value={profile?.phone || ''} disabled className="rounded-xl mt-1 bg-gray-50" />
+          <label className="text-sm font-medium text-[#F5F5F5]">Téléphone</label>
+          <Input value={profile?.phone || ''} disabled className="mt-1 rounded-xl bg-[#1C1C1C] text-white" />
         </div>
 
         {(profile?.role === 'worker' || worker) && (
@@ -272,9 +272,9 @@ export function ProfilePage() {
         <Button
           onClick={onSave}
           disabled={saving}
-          className="w-full rounded-xl h-11 bg-[#FF6600] hover:bg-[#e55a00]"
+          className="h-11 w-full rounded-xl bg-[#C27D3D] text-[#0A0A0A] hover:bg-[#D99A5B]"
         >
-          {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Enregistrer
         </Button>
       </div>

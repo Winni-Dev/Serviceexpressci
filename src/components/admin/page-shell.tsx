@@ -10,17 +10,17 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action, badge }: PageHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <div>
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-[#0A2240]">{title}</h1>
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{title}</h1>
           {badge !== undefined && (
-            <span className="inline-flex items-center rounded-full bg-[#FF6600]/10 px-2.5 py-0.5 text-xs font-semibold text-[#FF6600]">
+            <span className="inline-flex items-center rounded-full bg-[rgba(194,125,61,0.15)] border border-[#C27D3D]/30 px-2.5 py-0.5 text-xs font-semibold text-[#D99A5B]">
               {badge}
             </span>
           )}
         </div>
-        {description && <p className="text-gray-500 mt-1 text-sm">{description}</p>}
+        {description && <p className="text-zinc-400 mt-0.5 text-xs sm:text-sm">{description}</p>}
       </div>
       {action}
     </div>
@@ -39,8 +39,8 @@ export function AdminCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-gray-100 bg-white shadow-sm',
-        padding && 'p-5',
+        'rounded-xl sm:rounded-2xl border border-[#27272A] bg-[#121212] shadow-sm',
+        padding && 'p-4 sm:p-5',
         className
       )}
     >
@@ -59,11 +59,11 @@ export function FilterBar({
   resultLabel?: string;
 }) {
   return (
-    <AdminCard className="space-y-4">
+    <AdminCard className="space-y-3">
       {children}
       {resultCount !== undefined && (
-        <p className="text-sm text-gray-400">
-          <span className="font-medium text-[#0A2240]">{resultCount}</span> {resultLabel}
+        <p className="text-xs text-zinc-400">
+          <span className="font-semibold text-white">{resultCount}</span> {resultLabel}
         </p>
       )}
     </AdminCard>
@@ -73,7 +73,7 @@ export function FilterBar({
 export function ErrorAlert({ message }: { message: string }) {
   if (!message) return null;
   return (
-    <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
+    <div className="rounded-xl border border-[#FB7185]/30 bg-[#FB7185]/15 px-4 py-3 text-xs sm:text-sm text-[#FB7185]">
       {message}
     </div>
   );
@@ -89,13 +89,13 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn('col-span-full flex flex-col items-center justify-center py-16 text-center', className)}>
+    <div className={cn('col-span-full flex flex-col items-center justify-center py-12 text-center', className)}>
       {Icon && (
-        <div className="mb-4 rounded-2xl bg-gray-50 p-4">
-          <Icon className="w-8 h-8 text-gray-300" />
+        <div className="mb-3 rounded-2xl bg-[#18181B] border border-[#27272A] p-3.5">
+          <Icon className="w-6 h-6 text-zinc-500" />
         </div>
       )}
-      <p className="text-gray-400 text-sm">{message}</p>
+      <p className="text-zinc-400 text-xs sm:text-sm">{message}</p>
     </div>
   );
 }
@@ -112,7 +112,7 @@ export function EntityCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-gray-200',
+        'rounded-xl sm:rounded-2xl border border-[#27272A] bg-[#121212] p-4 shadow-sm transition-all duration-200 hover:border-[#C27D3D]/40',
         inactive && 'opacity-60',
         className
       )}
@@ -124,12 +124,12 @@ export function EntityCard({
 
 export function PageLoading() {
   return (
-    <div className="space-y-6 animate-pulse">
-      <div className="h-10 w-48 rounded-lg bg-gray-200" />
-      <div className="h-24 rounded-2xl bg-gray-200" />
-      <div className="grid md:grid-cols-3 gap-4">
+    <div className="space-y-5 animate-pulse">
+      <div className="h-8 w-44 rounded-xl bg-[#18181B] border border-[#27272A]" />
+      <div className="h-20 rounded-2xl bg-[#18181B] border border-[#27272A]" />
+      <div className="grid md:grid-cols-3 gap-3.5">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-40 rounded-2xl bg-gray-200" />
+          <div key={i} className="h-36 rounded-2xl bg-[#18181B] border border-[#27272A]" />
         ))}
       </div>
     </div>

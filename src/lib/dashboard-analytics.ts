@@ -11,14 +11,22 @@ export const STATUS_LABELS: Record<string, string> = {
 };
 
 export const STATUS_COLORS: Record<string, string> = {
-  new: '#F59E0B',
-  assigned: '#3B82F6',
-  in_progress: '#FF6600',
-  done: '#10B981',
-  cancelled: '#EF4444',
+  new: '#F59E0B',        // Série 1: Ambré/Or vif
+  assigned: '#22D3EE',   // Série 2: Cyan Néon
+  in_progress: '#C27D3D',// Ambré charte
+  done: '#34D399',       // Série 3: Vert Émeraude Néon
+  cancelled: '#FB7185',  // Série 5: Rose / Corail Néon
 };
 
-export const CHART_PALETTE = ['#FF6600', '#0A2240', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
+export const CHART_PALETTE = [
+  '#C27D3D', // Série 1: Ambré / Or
+  '#22D3EE', // Série 2: Cyan Néon
+  '#34D399', // Série 3: Vert Émeraude Néon
+  '#C084FC', // Série 4: Violet Électrique
+  '#FB7185', // Série 5: Rose / Corail Néon
+  '#F59E0B', // Ambré vif
+  '#38BDF8', // Cyan clair
+];
 
 export function getRequestsTrend(requests: Request[] = [], days = 7) {
   const today = startOfDay(new Date());

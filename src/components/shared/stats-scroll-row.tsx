@@ -93,7 +93,7 @@
 // }
 
 
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 interface StatsScrollRowProps {
@@ -159,6 +159,7 @@ interface StatBadgeProps {
   icon?: ReactNode;
   className?: string;
   masked?: boolean;
+  style?: CSSProperties;
 }
 
 const tones = {
@@ -196,6 +197,7 @@ export function StatBadge({
   icon,
   className,
   masked = false,
+  style,
 }: StatBadgeProps) {
   const t = tones[tone];
 
@@ -211,6 +213,7 @@ export function StatBadge({
         t.wrapper,
         className
       )}
+      style={style}
     >
       {/* Halo lumineux animé */}
       <div
@@ -249,19 +252,30 @@ export function StatBadge({
             <span
               className={cn(
                 'inline-flex h-7 w-7 items-center justify-center rounded-lg',
-                'bg-white/10 backdrop-blur-sm border border-white/10',
-                'transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3'
+                'bg-white/10 backdrop-blur-sm border border-white/20',
+                'transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3',
+                'text-white'
               )}
             >
               {icon}
             </span>
           )}
-          <span className="font-semibold uppercase tracking-wider text-[10px] truncate">
+          <span
+            className={cn(
+              'font-semibold uppercase tracking-wider text-[10px] truncate',
+              'text-white'
+            )}
+          >
             {label}
           </span>
         </div>
 
-        <p className="relative text-2xl lg:text-3xl font-bold tracking-tight truncate h-[1.15em]">
+        <p
+          className={cn(
+            'relative text-2xl lg:text-3xl font-bold tracking-tight truncate h-[1.15em]',
+            'text-white'
+          )}
+        >
           <span
             className={cn(
               'block w-full transition-all duration-500 origin-center',
@@ -282,7 +296,14 @@ export function StatBadge({
         </p>
 
         {hint && (
-          <p className="text-[11px] opacity-70 mt-1.5 truncate font-medium">{hint}</p>
+          <p
+            className={cn(
+              'text-[11px] opacity-90 mt-1.5 truncate font-medium',
+              'text-white/80'
+            )}
+          >
+            {hint}
+          </p>
         )}
       </div>
 

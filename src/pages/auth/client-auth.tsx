@@ -77,15 +77,15 @@ export function ClientAuthPage({ mode }: { mode: 'register' | 'login' }) {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-3xl border border-gray-100 shadow-xl shadow-[#0A2240]/5 overflow-hidden">
-        <div className="bg-gradient-to-br from-[#0A2240] to-[#0d2d52] px-6 py-8 text-white text-center">
-          <div className="flex justify-center mb-3">
+      <div className="w-full max-w-md overflow-hidden rounded-[28px] border border-[#2D2D2D] bg-[#141414] shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
+        <div className="border-b border-[#2D2D2D] bg-[#0A0A0A] px-6 py-8 text-center">
+          <div className="mb-3 flex justify-center">
             <BrandLogo showText={false} size="md" />
           </div>
-          <h1 className="text-xl font-bold">
+          <h1 className="text-xl font-semibold text-white">
             {isRegister ? 'Créer un compte' : 'Connexion'}
           </h1>
-          <p className="text-white/70 text-sm mt-1">
+          <p className="mt-1 text-sm text-[#A0A0A0]">
             {isRegister
               ? 'Inscrivez-vous pour faire des demandes de service'
               : 'Connectez-vous avec votre nom et votre numéro'}
@@ -94,7 +94,7 @@ export function ClientAuthPage({ mode }: { mode: 'register' | 'login' }) {
 
         <div className="p-6">
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-100">
+            <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
               {error}
             </div>
           )}
@@ -102,26 +102,26 @@ export function ClientAuthPage({ mode }: { mode: 'register' | 'login' }) {
           {isRegister ? (
             <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5">Nom complet</label>
-                <Input {...registerForm.register('name')} placeholder="Votre nom" className="rounded-xl h-11" />
+                <label className="mb-1.5 block text-sm font-medium text-[#F5F5F5]">Nom complet</label>
+                <Input {...registerForm.register('name')} placeholder="Votre nom" className="h-11 rounded-xl" />
                 {registerForm.formState.errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{registerForm.formState.errors.name.message}</p>
+                  <p className="mt-1 text-xs text-red-300">{registerForm.formState.errors.name.message}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Numéro de téléphone</label>
+                <label className="mb-1.5 block text-sm font-medium text-[#F5F5F5]">Numéro de téléphone</label>
                 <Input
                   {...registerForm.register('phone')}
                   type="tel"
                   placeholder="07XXXXXXXX"
-                  className="rounded-xl h-11"
+                  className="h-11 rounded-xl"
                 />
                 {registerForm.formState.errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{registerForm.formState.errors.phone.message}</p>
+                  <p className="mt-1 text-xs text-red-300">{registerForm.formState.errors.phone.message}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Localisation (zone)</label>
+                <label className="mb-1.5 block text-sm font-medium text-[#F5F5F5]">Localisation (zone)</label>
                 <FormSearchableSelect
                   control={registerForm.control}
                   name="zone_id"
@@ -130,54 +130,54 @@ export function ClientAuthPage({ mode }: { mode: 'register' | 'login' }) {
                   searchPlaceholder="Rechercher une zone..."
                 />
                 {registerForm.formState.errors.zone_id && (
-                  <p className="text-red-500 text-xs mt-1">{registerForm.formState.errors.zone_id.message}</p>
+                  <p className="mt-1 text-xs text-red-300">{registerForm.formState.errors.zone_id.message}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full rounded-xl h-11 bg-[#FF6600] hover:bg-[#e55a00]" disabled={loading}>
-                {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              <Button type="submit" className="h-11 w-full rounded-xl" disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 S'inscrire
               </Button>
             </form>
           ) : (
             <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5">Nom complet</label>
-                <Input {...loginForm.register('name')} placeholder="Votre nom" className="rounded-xl h-11" />
+                <label className="mb-1.5 block text-sm font-medium text-[#F5F5F5]">Nom complet</label>
+                <Input {...loginForm.register('name')} placeholder="Votre nom" className="h-11 rounded-xl" />
                 {loginForm.formState.errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{loginForm.formState.errors.name.message}</p>
+                  <p className="mt-1 text-xs text-red-300">{loginForm.formState.errors.name.message}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Numéro de téléphone</label>
+                <label className="mb-1.5 block text-sm font-medium text-[#F5F5F5]">Numéro de téléphone</label>
                 <Input
                   {...loginForm.register('phone')}
                   type="tel"
                   placeholder="07XXXXXXXX"
-                  className="rounded-xl h-11"
+                  className="h-11 rounded-xl"
                 />
                 {loginForm.formState.errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{loginForm.formState.errors.phone.message}</p>
+                  <p className="mt-1 text-xs text-red-300">{loginForm.formState.errors.phone.message}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full rounded-xl h-11 bg-[#FF6600] hover:bg-[#e55a00]" disabled={loading}>
-                {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              <Button type="submit" className="h-11 w-full rounded-xl" disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Se connecter
               </Button>
             </form>
           )}
 
-          <p className="text-center text-sm text-gray-500 mt-5">
+          <p className="mt-5 text-center text-sm text-[#A0A0A0]">
             {isRegister ? (
               <>
                 Déjà un compte ?{' '}
-                <Link to="/connexion" state={location.state} className="text-[#FF6600] font-medium">
+                <Link to="/connexion" state={location.state} className="font-medium text-[#FEC18A] transition-colors hover:text-[#D99A5B]">
                   Se connecter
                 </Link>
               </>
             ) : (
               <>
                 Pas encore de compte ?{' '}
-                <Link to="/inscription" state={location.state} className="text-[#FF6600] font-medium">
+                <Link to="/inscription" state={location.state} className="font-medium text-[#FEC18A] transition-colors hover:text-[#D99A5B]">
                   S'inscrire
                 </Link>
               </>

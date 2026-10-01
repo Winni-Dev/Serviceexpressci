@@ -60,8 +60,8 @@ export function PartnerWorkersPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#0A2240]">Travailleurs</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-white">Travailleurs</h1>
+          <p className="text-sm text-[#A0A0A0]">
             Invitez un utilisateur inscrit avec son numéro. Il devra accepter depuis son compte.
           </p>
         </div>
@@ -85,17 +85,17 @@ export function PartnerWorkersPage() {
               await alert({ title: 'Erreur', description: getErrorMessage(e), variant: 'error' });
             }
           })}
-          className="bg-white rounded-2xl border p-5 space-y-4"
+          className="space-y-4 rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 shadow-[0_16px_32px_rgba(0,0,0,0.2)]"
         >
           <div>
-            <label className="text-sm font-medium">Numéro de téléphone</label>
-            <Input {...form.register('phone')} className="rounded-xl mt-1" placeholder="07XXXXXXXX" />
+            <label className="text-sm font-medium text-[#F5F5F5]">Numéro de téléphone</label>
+            <Input {...form.register('phone')} className="mt-1 rounded-xl" placeholder="07XXXXXXXX" />
             {form.formState.errors.phone && (
               <p className="text-xs text-red-500">{form.formState.errors.phone.message}</p>
             )}
           </div>
           <div>
-            <label className="text-sm font-medium">Métier / service</label>
+            <label className="text-sm font-medium text-[#F5F5F5]">Métier / service</label>
             <FormSearchableSelect
               control={form.control}
               name="service_id"
@@ -105,7 +105,7 @@ export function PartnerWorkersPage() {
             />
           </div>
           <div>
-            <label className="text-sm font-medium mb-2 block">Zones (plusieurs possibles)</label>
+            <label className="mb-2 block text-sm font-medium text-[#F5F5F5]">Zones (plusieurs possibles)</label>
             <Controller
               control={form.control}
               name="zone_ids"
@@ -132,31 +132,31 @@ export function PartnerWorkersPage() {
         </form>
       )}
 
-      <div className="bg-white rounded-2xl border p-5">
-        <h2 className="font-semibold mb-3">Invitations</h2>
+      <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 shadow-[0_16px_32px_rgba(0,0,0,0.14)]">
+        <h2 className="mb-3 font-semibold text-white">Invitations</h2>
         {isLoading && <Loader2 className="w-5 h-5 animate-spin text-[#FF6600]" />}
         <div className="space-y-2">
           {(invitations as WorkerInvitation[] | undefined)?.map((inv) => (
-            <div key={inv.id} className="flex justify-between text-sm py-2 border-b last:border-0">
-              <span>
+            <div key={inv.id} className="flex justify-between border-b border-[#2D2D2D] py-2 text-sm last:border-0">
+              <span className="text-[#F5F5F5]">
                 {inv.phone} · {inv.services?.name}
               </span>
               <Badge variant="secondary">{inv.status}</Badge>
             </div>
           ))}
           {!invitations?.length && !isLoading && (
-            <p className="text-sm text-gray-500">Aucune invitation.</p>
+            <p className="text-sm text-[#A0A0A0]">Aucune invitation.</p>
           )}
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border p-5">
-        <h2 className="font-semibold mb-3">Équipe ({workers?.length ?? 0})</h2>
+      <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 shadow-[0_16px_32px_rgba(0,0,0,0.14)]">
+        <h2 className="mb-3 font-semibold text-white">Équipe ({workers?.length ?? 0})</h2>
         <div className="space-y-2">
           {workers?.map((w) => (
-            <div key={w.id} className="text-sm py-2 border-b last:border-0">
-              <p className="font-medium">{w.name}</p>
-              <p className="text-gray-500">{w.phone} · {w.services?.name}</p>
+            <div key={w.id} className="border-b border-[#2D2D2D] py-2 text-sm last:border-0">
+              <p className="font-medium text-white">{w.name}</p>
+              <p className="text-[#A0A0A0]">{w.phone} · {w.services?.name}</p>
             </div>
           ))}
         </div>

@@ -226,21 +226,19 @@ export function AdminLayout() {
   const sidebarWidth = isCollapsed ? 'w-[72px]' : 'w-[240px]';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f4f6f9] to-[#e8ecf1]">
-      {/* Overlay pour mobile et tablette */}
+    <div className="min-h-screen bg-[#000000]">
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setIsMobileOpen(false)}
           />
         )}
       </AnimatePresence>
 
-      {/* Sidebar - fixe sur desktop, overlay sur mobile/tablette */}
       <motion.aside
         initial={false}
         animate={{
@@ -251,10 +249,10 @@ export function AdminLayout() {
           fixed top-4 left-4 z-50
           ${sidebarWidth}
           h-[calc(100vh-2rem)]
-          bg-[#0A2240]
-          border border-white/10
-          rounded-3xl
-          shadow-2xl shadow-[#0A2240]/30
+          bg-[#121212]
+          border border-[#27272A]
+          rounded-2xl
+          shadow-[0_20px_40px_rgba(0,0,0,0.5)]
           flex flex-col
           transition-all duration-300
           overflow-hidden
@@ -263,52 +261,42 @@ export function AdminLayout() {
           lg:flex
         `}
       >
-        {/* Bouton de fermeture pour mobile/tablette */}
         <button
           onClick={() => setIsMobileOpen(false)}
-          className="absolute top-3 right-3 z-20 flex lg:hidden items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors"
+          className="absolute top-3 right-3 z-20 flex lg:hidden items-center justify-center w-8 h-8 rounded-full bg-[#18181B] hover:bg-[#27272A] text-zinc-400 hover:text-white transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
-        {/* Bouton de collapse/expand - uniquement sur desktop */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={`
             absolute z-20
             flex items-center justify-center
-            w-8 h-8 rounded-full
-            bg-[#FF6600] hover:bg-[#e55a00]
-            border-2 border-white/20
-            text-white
-            shadow-lg shadow-[#FF6600]/30
-            transition-all duration-300
+            w-7 h-7 rounded-full
+            bg-[#C27D3D] hover:bg-[#D99A5B]
+            border border-[#D99A5B]/40
+            text-[#000000]
+            shadow-[0_8px_18px_rgba(194,125,61,0.25)]
+            transition-all duration-200
             group
-            hover:scale-110
+            hover:scale-105
             hidden lg:flex
-            ${isCollapsed 
-              ? 'bottom-16 left-1/2 -translate-x-1/2' 
-              : 'top-3 right-3'
-            }
+            ${isCollapsed ? 'bottom-16 left-1/2 -translate-x-1/2' : 'top-3 right-3'}
           `}
           title={isCollapsed ? 'Développer' : 'Réduire'}
         >
           {isCollapsed ? (
-            <ChevronRight className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <ChevronRight className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
           ) : (
-            <ChevronLeft className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <ChevronLeft className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
           )}
         </button>
 
-        {/* Logo */}
-        <div className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-4'} pt-6 pb-4 border-b border-white/10 flex-shrink-0 w-full`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-4'} pt-5 pb-3.5 border-b border-[#27272A] flex-shrink-0 w-full`}>
           {isCollapsed ? (
             <Link to={navigation[0]?.href || '/admin'} className="flex items-center justify-center">
-              <img 
-                src="/favicon.jpeg" 
-                alt="Service Express CI" 
-                className="w-10 h-10 object-cover rounded-xl"
-              />
+              <img src="/favicon.jpeg" alt="Service Express CI" className="w-9 h-9 object-cover rounded-xl" />
             </Link>
           ) : (
             <BrandLogo
@@ -320,8 +308,7 @@ export function AdminLayout() {
           )}
         </div>
 
-        {/* Navigation */}
-        <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-3'} py-4 overflow-y-auto w-full`}>
+        <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-3'} py-3 overflow-y-auto w-full`}>
           <div className="space-y-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
@@ -332,23 +319,23 @@ export function AdminLayout() {
                   key={item.name}
                   to={item.href}
                   className={`
-                    flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-300
+                    flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200
                     ${isActive
-                      ? 'bg-gradient-to-r from-[#FF6600] to-[#e55a00] text-white shadow-lg shadow-[#FF6600]/25'
-                      : 'text-white/70 hover:bg-white/10 hover:text-white'
+                      ? 'bg-[rgba(194,125,61,0.15)] text-[#D99A5B] border border-[#C27D3D]/30 shadow-[0_6px_16px_rgba(194,125,61,0.12)]'
+                      : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center' : ''}
                   `}
                   onClick={() => setIsMobileOpen(false)}
                   title={isCollapsed ? item.name : ''}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#D99A5B]' : 'text-zinc-400'}`} />
                   {!isCollapsed && <span>{item.name}</span>}
-                  
+
                   {isActive && !isCollapsed && (
                     <motion.div
                       layoutId="activeIndicator"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-white/60"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-[#D99A5B]"
                     />
                   )}
                 </Link>
@@ -357,58 +344,54 @@ export function AdminLayout() {
           </div>
         </nav>
 
-        {/* Bas de la sidebar - déconnexion */}
-        <div className={`flex-shrink-0 border-t border-white/10 ${isCollapsed ? 'px-2' : 'px-3'} py-4 w-full`}>
-          <Button 
-            variant="ghost" 
+        <div className={`flex-shrink-0 border-t border-[#27272A] ${isCollapsed ? 'px-2' : 'px-3'} py-3 w-full`}>
+          <Button
+            variant="ghost"
             className={`
-              text-white/60 hover:text-white hover:bg-white/10 rounded-2xl transition-all duration-300
+              text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200
               ${isCollapsed ? 'w-full px-0 justify-center' : 'w-full justify-start px-3'}
             `}
             onClick={handleLogout}
             title={isCollapsed ? 'Déconnexion' : ''}
           >
             <LogOut className="w-4 h-4" />
-            {!isCollapsed && <span className="ml-2 text-sm">Déconnexion</span>}
+            {!isCollapsed && <span className="ml-2 text-xs sm:text-sm">Déconnexion</span>}
           </Button>
         </div>
       </motion.aside>
 
-      {/* Contenu principal */}
       <div className={`transition-all duration-300 ${isCollapsed ? 'lg:pl-[88px]' : 'lg:pl-[256px]'} pl-4 pr-4`}>
-        {/* Header avec bouton menu mobile/tablette */}
-        <header className="sticky top-4 z-30 bg-white/70 backdrop-blur-xl border border-white/20 rounded-2xl shadow-sm">
-          <div className="flex items-center justify-between h-14 px-4 md:px-6">
+        <header className="sticky top-4 z-30 bg-[#121212]/90 backdrop-blur-xl border border-[#27272A] rounded-xl sm:rounded-2xl shadow-sm">
+          <div className="flex items-center justify-between h-13 px-4 md:px-5">
             <div className="flex items-center gap-3">
-              <button 
-                className="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors" 
+              <button
+                className="lg:hidden p-1.5 rounded-lg hover:bg-white/5 transition-colors border border-[#27272A] text-zinc-300"
                 onClick={() => setIsMobileOpen(true)}
               >
-                <Menu className="w-5 h-5 text-[#0A2240]" />
+                <Menu className="w-4 h-4 text-white" />
               </button>
-              
-              <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF6600]"></span>
-                <span>
+
+              <div className="hidden sm:flex items-center gap-2 text-xs text-zinc-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C27D3D]"></span>
+                <span className="text-zinc-200 font-medium">
                   {navigation.find(item => item.href === location.pathname)?.name || 'Dashboard'}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <RefreshDataButton variant="outline" label="Rafraîchir" />
-              <div className="hidden md:flex items-center gap-2 text-sm">
-                <span className="text-gray-400">Connecté</span>
-                <span className="font-medium text-[#0A2240]">{session?.user?.email}</span>
+              <div className="hidden md:flex items-center gap-2 text-xs">
+                <span className="text-zinc-500">Connecté :</span>
+                <span className="font-medium text-white">{session?.user?.email}</span>
               </div>
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF6600] to-[#e55a00] flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-[#FF6600]/20">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#C27D3D] to-[#D99A5B] flex items-center justify-center text-[#000000] text-xs font-bold shadow-sm">
                 {initials}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Contenu */}
         <main className="p-4 md:p-6 max-w-[1400px] mx-auto">
           <Outlet />
         </main>

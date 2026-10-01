@@ -945,7 +945,7 @@ interface RequestOrderModalProps {
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <label className="mb-1 block text-[11px] font-medium text-foreground/70">
+    <label className="mb-1 block text-[11px] font-medium text-[#F5F5F5]">
       {children}
     </label>
   );
@@ -970,9 +970,9 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const inputCls = cn(
-  'h-9 w-full rounded-lg border-border/60 bg-muted/20 text-[13.5px]',
+  'h-9 w-full rounded-xl border border-[#2D2D2D] bg-[#262626] text-[13.5px] text-white placeholder:text-[#707070]',
   'transition-all duration-200',
-  'focus-visible:border-[#FF6600]/50 focus-visible:ring-2 focus-visible:ring-[#FF6600]/15'
+  'focus-visible:border-[#C27D3D] focus-visible:ring-2 focus-visible:ring-[#C27D3D]/25'
 );
 
 /* -------------------------------------------------------------------------- */
@@ -1123,17 +1123,16 @@ export function RequestOrderModal({
         )}
       >
         {/* ============================= HEADER (compact) ============================= */}
-        <div className="relative flex items-center gap-3 px-4 py-3.5 border-b border-border/60 bg-background">
-          {/* Trait orange signature */}
-          <span className="absolute left-0 top-0 h-full w-[3px] bg-[#FF6600]" />
+        <div className="relative flex items-center gap-3 border-b border-[#2D2D2D] bg-[#0A0A0A] px-4 py-3.5">
+          <span className="absolute left-0 top-0 h-full w-[3px] bg-[#C27D3D]" />
 
           {service && ServiceIcon ? (
-            <div className="flex items-center justify-center border rounded-lg h-9 w-9 shrink-0 border-border/70 bg-muted/40">
-              <ServiceIcon className="h-4 w-4 text-[#FF6600]" strokeWidth={1.75} />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#2D2D2D] bg-[#141414]">
+              <ServiceIcon className="h-4 w-4 text-[#FEC18A]" strokeWidth={1.75} />
             </div>
           ) : (
-            <div className="flex items-center justify-center border rounded-lg h-9 w-9 shrink-0 border-border/70 bg-muted/40">
-              <Camera className="h-4 w-4 text-[#FF6600]" strokeWidth={1.75} />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#2D2D2D] bg-[#141414]">
+              <Camera className="h-4 w-4 text-[#FEC18A]" strokeWidth={1.75} />
             </div>
           )}
 
@@ -1167,7 +1166,7 @@ export function RequestOrderModal({
             <div className="flex flex-col gap-2">
               <Button
                 onClick={goToRegister}
-                className="group h-10 w-full gap-1.5 rounded-full bg-[#FF6600] text-white shadow-sm shadow-[#FF6600]/25 hover:bg-[#e55a00]"
+                className="group h-10 w-full gap-1.5 rounded-full"
               >
                 <span className="text-[13px] font-medium">Créer mon compte</span>
                 <ArrowRight
@@ -1271,10 +1270,10 @@ export function RequestOrderModal({
                 rows={3}
                 placeholder="Ex : Fuite sous l'évier, urgente, 3e étage…"
                 className={cn(
-                  'w-full resize-none rounded-lg border border-border/60 bg-muted/20 px-3 py-2',
-                  'break-words whitespace-pre-wrap text-[12.5px] leading-relaxed text-foreground placeholder:text-muted-foreground/50',
+                  'w-full resize-none rounded-xl border border-[#2D2D2D] bg-[#262626] px-3 py-2',
+                  'break-words whitespace-pre-wrap text-[12.5px] leading-relaxed text-white placeholder:text-[#707070]',
                   'transition-all duration-200',
-                  'focus:border-[#FF6600]/50 focus:outline-none focus:ring-2 focus:ring-[#FF6600]/15'
+                  'focus:border-[#C27D3D] focus:outline-none focus:ring-2 focus:ring-[#C27D3D]/25'
                 )}
                 style={{ fontSize: '16px' }}
               />
@@ -1297,16 +1296,16 @@ export function RequestOrderModal({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className={cn(
-                    'group flex w-full items-center gap-2.5 rounded-lg border border-dashed border-border/70 bg-muted/10 px-3 py-2.5 text-left',
+                    'group flex w-full items-center gap-2.5 rounded-xl border border-dashed border-[#2D2D2D] bg-[#141414] px-3 py-2.5 text-left',
                     'transition-all duration-200',
-                    'hover:border-[#FF6600]/40 hover:bg-[#FF6600]/[0.04]'
+                    'hover:border-[#C27D3D]/40 hover:bg-[#1C1C1C]'
                   )}
                 >
                   <Camera
-                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors group-hover:text-[#FF6600]"
+                    className="h-3.5 w-3.5 shrink-0 text-[#A0A0A0] transition-colors group-hover:text-[#FEC18A]"
                     strokeWidth={1.75}
                   />
-                  <span className="flex-1 min-w-0 truncate text-[12px] text-muted-foreground">
+                  <span className="flex-1 min-w-0 truncate text-[12px] text-[#A0A0A0]">
                     Ajouter une photo
                   </span>
                   <span className="shrink-0 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">
@@ -1341,7 +1340,7 @@ export function RequestOrderModal({
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="group h-10 w-full gap-1.5 rounded-full bg-[#FF6600] text-white shadow-sm shadow-[#FF6600]/25 transition-all duration-300 hover:bg-[#e55a00] disabled:opacity-60"
+                className="group h-10 w-full gap-1.5 rounded-full transition-all duration-300 disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <>

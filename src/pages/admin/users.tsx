@@ -163,12 +163,12 @@ export function AdminUsersPage() {
               {u.photo_url ? (
                 <img src={u.photo_url} alt="" className="w-12 h-12 rounded-full object-cover" />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-[#0A2240] text-white flex items-center justify-center font-semibold">
+                <div className="w-12 h-12 rounded-full bg-[rgba(194,125,61,0.15)] text-[#D99A5B] border border-[#C27D3D]/30 flex items-center justify-center font-semibold">
                   {(u.name || u.email || '?').charAt(0).toUpperCase()}
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-[#0A2240] truncate">{u.name || 'Sans nom'}</p>
+                <p className="font-semibold text-white truncate">{u.name || 'Sans nom'}</p>
                 <p className="text-xs text-gray-500">{u.phone || u.email}</p>
                 <Badge className="mt-1" variant="secondary">
                   Client
@@ -221,9 +221,9 @@ export function AdminUsersPage() {
 
           {selectedUser && (
             <div className="space-y-4 pt-2">
-              <div className="rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm">
-                <p className="font-semibold text-[#0A2240]">{selectedUser.name || 'Sans nom'}</p>
-                <p className="text-gray-500">{selectedUser.phone || selectedUser.email}</p>
+              <div className="rounded-xl border border-[#27272A] bg-[#18181B] p-3 text-sm">
+                <p className="font-semibold text-white">{selectedUser.name || 'Sans nom'}</p>
+                <p className="text-zinc-400">{selectedUser.phone || selectedUser.email}</p>
               </div>
 
               <div className="space-y-2">

@@ -31,12 +31,12 @@ export function BrandLogo({
         alt="Service Express CI"
         className={cn(
           sizeMap[size],
-          'rounded-xl object-cover shrink-0 ring-1 ring-black/5 shadow-sm'
+          'rounded-xl object-cover shrink-0 ring-1 ring-[#2D2D2D] shadow-sm'
         )}
       />
       {showText && (
         <span className={cn('font-bold tracking-tight leading-tight', textClassName)}>
-          Service Express <span className="text-[#FF6600]">CI</span>
+          Service Express <span className="text-[#C27D3D]">CI</span>
         </span>
       )}
     </div>

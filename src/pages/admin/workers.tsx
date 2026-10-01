@@ -844,15 +844,15 @@ export function WorkersPage() {
         }
       />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         {[
-          { label: 'Total', value: workers?.length ?? 0, color: 'text-[#0A2240]' },
-          { label: 'Actifs', value: activeCount, color: 'text-emerald-600' },
-          { label: 'Inactifs', value: inactiveCount, color: 'text-gray-400' },
+          { label: 'Total', value: workers?.length ?? 0, color: 'text-white' },
+          { label: 'Actifs', value: activeCount, color: 'text-[#34D399]' },
+          { label: 'Inactifs', value: inactiveCount, color: 'text-zinc-400' },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm text-center">
-            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+          <div key={stat.label} className="rounded-xl sm:rounded-2xl border border-[#27272A] bg-[#121212] p-3.5 shadow-sm text-center">
+            <p className={`text-xl sm:text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+            <p className="text-xs text-zinc-400 mt-1">{stat.label}</p>
           </div>
         ))}
       </div>

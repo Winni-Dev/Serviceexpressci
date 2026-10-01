@@ -101,8 +101,8 @@ export function WorkerRequestsPage() {
     <>
       <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-[#0A2240]">Demandes</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Demandes</h1>
+        <p className="text-sm text-[#A0A0A0]">
           Proposez un prix, suivez vos propositions dans Mes missions, puis exécutez les missions acceptées.
         </p>
       </div>
@@ -121,21 +121,21 @@ export function WorkerRequestsPage() {
       )}
 
       <section className="space-y-3">
-        <h2 className="font-semibold text-[#0A2240]">Nouvelles demandes (à chiffrer)</h2>
+        <h2 className="font-semibold text-white">Nouvelles demandes (à chiffrer)</h2>
         {isLoading && <Loader2 className="w-5 h-5 animate-spin text-[#FF6600]" />}
         {!isLoading && !openToQuote?.length && (
-          <p className="text-sm text-gray-500 bg-white rounded-2xl border p-6">
+          <p className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-6 text-sm text-[#A0A0A0]">
             Aucune nouvelle demande correspondante.
           </p>
         )}
         {openToQuote?.map((r) => (
-          <div key={r.id} className="bg-white rounded-2xl border p-4 space-y-3">
+          <div key={r.id} className="space-y-3 rounded-2xl border border-[#2D2D2D] bg-[#141414] p-4 shadow-[0_16px_32px_rgba(0,0,0,0.2)]">
             <div className="flex justify-between gap-2">
               <div>
-                <p className="font-medium">
+                <p className="font-medium text-white">
                   {r.services?.name} · {r.zones?.name}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">{r.description}</p>
+                <p className="mt-1 text-sm text-[#A0A0A0]">{r.description}</p>
                 {r.photo_url && (
                   <div className="mt-2">
                     <button
@@ -150,7 +150,7 @@ export function WorkerRequestsPage() {
                     </button>
                   </div>
                 )}
-                <p className="text-xs text-gray-400 mt-1">{r.quartier}</p>
+                <p className="mt-1 text-xs text-[#A0A0A0]">{r.quartier}</p>
               </div>
               <Badge>new</Badge>
             </div>
@@ -210,22 +210,22 @@ export function WorkerRequestsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-semibold text-[#0A2240]">Mes missions</h2>
+        <h2 className="font-semibold text-white">Mes missions</h2>
 
         {!!pendingProposals?.length && (
           <div className="space-y-2">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            <p className="text-xs font-medium uppercase tracking-wide text-[#A0A0A0]">
               Propositions en attente du client
             </p>
             {pendingProposals.map((p) => (
-              <div key={p.id} className="bg-white rounded-2xl border border-dashed border-[#FF6600]/40 p-4">
+              <div key={p.id} className="rounded-2xl border border-dashed border-[#FF6600]/40 bg-[#141414] p-4">
                 <div className="flex flex-wrap justify-between gap-2">
                   <div>
-                    <p className="font-medium">{p.requests?.services?.name || 'Demande'}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-medium text-white">{p.requests?.services?.name || 'Demande'}</p>
+                    <p className="text-sm text-[#A0A0A0]">
                       {p.requests?.name} · {p.requests?.zones?.name}
                     </p>
-                    <p className="text-sm text-[#FF6600] font-semibold mt-1">
+                    <p className="mt-1 text-sm font-semibold text-[#FF6600]">
                       Votre offre : {Number(p.amount).toLocaleString('fr-FR')} FCFA
                     </p>
                   </div>
@@ -237,21 +237,21 @@ export function WorkerRequestsPage() {
         )}
 
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Missions assignées</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-[#A0A0A0]">Missions assignées</p>
           {(assigned as Request[] | undefined)
             ?.filter((r) => r.status !== 'new')
             .map((r) => (
               <div
                 key={r.id}
-                className="bg-white rounded-2xl border p-4 flex flex-wrap items-center justify-between gap-3"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#2D2D2D] bg-[#141414] p-4"
               >
                 <div>
-                  <p className="font-medium">{r.services?.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-white">{r.services?.name}</p>
+                  <p className="text-sm text-[#A0A0A0]">
                     {r.name} · {r.phone} · {r.zones?.name}
                   </p>
                   {r.price != null && (
-                    <p className="text-sm text-[#FF6600] font-semibold">
+                    <p className="text-sm font-semibold text-[#FF6600]">
                       {Number(r.price).toLocaleString('fr-FR')} FCFA
                     </p>
                   )}
@@ -299,7 +299,7 @@ export function WorkerRequestsPage() {
               </div>
             ))}
           {!assigned?.filter((r) => r.status !== 'new').length && !pendingProposals?.length && (
-            <p className="text-sm text-gray-500 bg-white rounded-2xl border p-6">Aucune mission pour le moment.</p>
+            <p className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-6 text-sm text-[#A0A0A0]">Aucune mission pour le moment.</p>
           )}
         </div>
       </section>
@@ -318,11 +318,11 @@ export function WorkerRequestsPage() {
         <DialogContent className="sm:max-w-md rounded-2xl">
           <div className="space-y-4">
             <div>
-              <p className="text-xs uppercase tracking-wide text-gray-400">Supplément de mission</p>
-              <h3 className="text-lg font-bold text-[#0A2240]">Demander un forfait supplémentaire</h3>
+              <p className="text-xs uppercase tracking-wide text-[#A0A0A0]">Supplément de mission</p>
+              <h3 className="text-lg font-bold text-white">Demander un forfait supplémentaire</h3>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#0A2240]">Montant supplémentaire (FCFA)</label>
+              <label className="text-sm font-medium text-[#F5F5F5]">Montant supplémentaire (FCFA)</label>
               <Input
                 type="number"
                 min="1"
@@ -332,7 +332,7 @@ export function WorkerRequestsPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#0A2240]">Pourquoi ce supplément ?</label>
+              <label className="text-sm font-medium text-[#F5F5F5]">Pourquoi ce supplément ?</label>
               <Input
                 value={supplementReason}
                 onChange={(e) => setSupplementReason(e.target.value)}

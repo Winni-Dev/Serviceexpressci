@@ -95,11 +95,11 @@ export function SearchableMultiSelect({
           setOpen((o) => !o);
         }}
         className={cn(
-          'flex h-10 w-full items-center justify-between rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm',
-          'focus:outline-none focus:ring-2 focus:ring-[#FF6600] focus:border-transparent'
+          'flex h-10 w-full items-center justify-between rounded-xl border border-[#2D2D2D] bg-[#262626] px-3 py-2 text-sm text-white',
+          'focus:outline-none focus:ring-2 focus:ring-[#C27D3D]/30 focus:border-[#C27D3D]'
         )}
       >
-        <span className={cn('truncate', !summary && 'text-gray-400')}>
+        <span className={cn('truncate', !summary && 'text-[#707070]')}>
           {summary || placeholder}
         </span>
         <div className="flex items-center gap-2 shrink-0">
@@ -118,27 +118,27 @@ export function SearchableMultiSelect({
                   clear();
                 }
               }}
-              className="inline-flex h-6 w-6 items-center justify-center rounded-full hover:bg-gray-100"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/5"
               aria-label="Effacer la sélection"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="h-4 w-4 text-[#A0A0A0]" />
             </span>
           )}
-          <ChevronDown className={cn('w-4 h-4 text-gray-400 transition-transform', open && 'rotate-180')} />
+          <ChevronDown className={cn('h-4 w-4 text-[#A0A0A0] transition-transform', open && 'rotate-180')} />
         </div>
       </button>
 
       {open && (
-        <div className="absolute z-[100] mt-2 w-full rounded-xl border border-gray-200 bg-white shadow-lg">
-          <div className="p-2 border-b">
+        <div className="absolute z-[100] mt-2 w-full rounded-xl border border-[#2D2D2D] bg-[#141414] shadow-[0_20px_40px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-[#2D2D2D] p-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#707070]" />
               <Input
                 ref={inputRef}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="pl-8 h-9 text-base sm:text-sm"
+                className="h-9 pl-8 text-base sm:text-sm"
                 style={{ fontSize: '16px' }}
               />
             </div>
@@ -146,7 +146,7 @@ export function SearchableMultiSelect({
 
           <div className="max-h-64 overflow-y-auto py-1">
             {filtered.length === 0 ? (
-              <div className="px-3 py-2 text-sm text-gray-500">{'Aucun résultat'}</div>
+              <div className="px-3 py-2 text-sm text-[#A0A0A0]">{'Aucun résultat'}</div>
             ) : (
               filtered.map((option) => {
                 const selected = values.includes(option.value);
@@ -156,12 +156,12 @@ export function SearchableMultiSelect({
                     type="button"
                     onClick={() => toggleValue(option.value)}
                     className={cn(
-                      'flex w-full items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50',
-                      selected && 'bg-[#FF6600]/10 text-[#FF6600]'
+                      'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white transition-colors hover:bg-white/5',
+                      selected && 'bg-[#C27D3D]/10 text-[#FEC18A]'
                     )}
                   >
-                    <span className="w-5 flex items-center justify-center">
-                      {selected ? <Check className="w-4 h-4" /> : <span className="w-4 h-4" />}
+                    <span className="flex w-5 items-center justify-center">
+                      {selected ? <Check className="h-4 w-4" /> : <span className="h-4 w-4" />}
                     </span>
                     <span className="truncate">{option.label}</span>
                   </button>

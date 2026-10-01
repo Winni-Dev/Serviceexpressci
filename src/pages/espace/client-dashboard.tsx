@@ -54,36 +54,36 @@ function ProposalList({ requestId }: { requestId: string }) {
     },
   });
 
-  if (isLoading) return <Loader2 className="w-4 h-4 animate-spin text-[#FF6600]" />;
+  if (isLoading) return <Loader2 className="w-4 h-4 animate-spin text-[#FEC18A]" />;
   if (error) {
-    return <p className="text-sm text-red-500">{getErrorMessage(error)}</p>;
+    return <p className="text-sm text-red-300">{getErrorMessage(error)}</p>;
   }
   if (!proposals?.length) {
-    return <p className="text-sm text-gray-500">Aucune proposition pour le moment. Actualisation auto…</p>;
+    return <p className="text-sm text-[#A0A0A0]">Aucune proposition pour le moment. Actualisation auto…</p>;
   }
 
   return (
-    <div className="space-y-3 mt-3">
-      <p className="text-xs text-gray-400">{proposals.length} proposition(s)</p>
+    <div className="mt-3 space-y-3">
+      <p className="text-xs text-[#A0A0A0]">{proposals.length} proposition(s)</p>
       {(proposals as RequestProposal[]).map((p) => (
         <div
           key={p.id}
-          className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50/80"
+          className="flex flex-col gap-3 rounded-xl border border-[#2D2D2D] bg-[#141414] p-3 sm:flex-row sm:items-center"
         >
           {p.workers?.photo_url ? (
             <img
               src={p.workers.photo_url}
               alt=""
-              className="w-14 h-14 rounded-full object-cover border-2 border-white shadow"
+              className="h-14 w-14 rounded-full border-2 border-[#2D2D2D] object-cover shadow-sm shadow-black/20"
             />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-[#0A2240] text-white flex items-center justify-center font-semibold">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#1C1C1C] font-semibold text-white">
               {(p.workers?.name || '?').charAt(0)}
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-[#0A2240] truncate">{p.workers?.name}</p>
-            <p className="text-xs text-gray-500">
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-medium text-white">{p.workers?.name}</p>
+            <p className="text-xs text-[#A0A0A0]">
               {p.workers?.services?.name || 'Service'}
               {zoneLabel(p.workers) ? ` · ${zoneLabel(p.workers)}` : ''}
             </p>
@@ -94,15 +94,15 @@ function ProposalList({ requestId }: { requestId: string }) {
               showValue={(p.rating_count || 0) > 0}
               count={p.rating_count}
             />
-            <p className="text-sm text-[#FF6600] font-semibold mt-1">
+            <p className="mt-1 text-sm font-semibold text-[#FEC18A]">
               {Number(p.amount).toLocaleString('fr-FR')} FCFA
             </p>
-            {p.message && <p className="text-xs text-gray-500 mt-0.5">{p.message}</p>}
+            {p.message && <p className="mt-0.5 text-xs text-[#A0A0A0]">{p.message}</p>}
           </div>
           {p.status === 'pending' && (
             <Button
               size="sm"
-              className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00] shrink-0"
+              className="shrink-0 rounded-xl"
               disabled={accept.isPending}
               onClick={async () => {
                 try {
@@ -152,34 +152,34 @@ function RequestPriceAdjustmentPanel({ requestId }: { requestId: string }) {
   });
 
   const pending = (adjustments ?? []).filter((a) => a.status === 'pending');
-  if (isLoading) return <Loader2 className="w-4 h-4 animate-spin text-[#FF6600]" />;
+  if (isLoading) return <Loader2 className="w-4 h-4 animate-spin text-[#FEC18A]" />;
   if (!pending.length) return null;
 
   return (
-    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 space-y-3">
-      <p className="text-sm font-semibold text-[#0A2240]">Demande de supplément</p>
+    <div className="mt-3 space-y-3 rounded-xl border border-[#C27D3D]/30 bg-[#C27D3D]/8 p-3">
+      <p className="text-sm font-semibold text-white">Demande de supplément</p>
       {pending.map((adj) => (
-        <div key={adj.id} className="rounded-xl bg-white p-3 border border-amber-100">
-          <p className="text-xs text-gray-500 mb-2">Prix initial : {Number(adj.previous_price).toLocaleString('fr-FR')} FCFA</p>
-          <div className="grid sm:grid-cols-3 gap-2 text-sm">
+        <div key={adj.id} className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-3">
+          <p className="mb-2 text-xs text-[#A0A0A0]">Prix initial : {Number(adj.previous_price).toLocaleString('fr-FR')} FCFA</p>
+          <div className="grid gap-2 text-sm sm:grid-cols-3">
             <div>
-              <span className="text-gray-500 block">Supplément</span>
-              <strong className="text-[#FF6600]">{Number(adj.extra_price).toLocaleString('fr-FR')} FCFA</strong>
+              <span className="block text-[#A0A0A0]">Supplément</span>
+              <strong className="text-[#FEC18A]">{Number(adj.extra_price).toLocaleString('fr-FR')} FCFA</strong>
             </div>
             <div>
-              <span className="text-gray-500 block">Nouveau total</span>
-              <strong>{Number(adj.new_total).toLocaleString('fr-FR')} FCFA</strong>
+              <span className="block text-[#A0A0A0]">Nouveau total</span>
+              <strong className="text-white">{Number(adj.new_total).toLocaleString('fr-FR')} FCFA</strong>
             </div>
             <div>
-              <span className="text-gray-500 block">Statut</span>
-              <Badge className="bg-amber-100 text-amber-800 border-amber-200">En attente</Badge>
+              <span className="block text-[#A0A0A0]">Statut</span>
+              <Badge className="border-[#C27D3D]/30 bg-[#C27D3D]/10 text-[#FEC18A]">En attente</Badge>
             </div>
           </div>
-          {adj.reason && <p className="text-xs text-gray-600 mt-2">Motif : {adj.reason}</p>}
-          <div className="flex gap-2 mt-3">
+          {adj.reason && <p className="mt-2 text-xs text-[#A0A0A0]">Motif : {adj.reason}</p>}
+          <div className="mt-3 flex gap-2">
             <Button
               size="sm"
-              className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00]"
+              className="rounded-xl"
               disabled={approve.isPending || reject.isPending}
               onClick={async () => {
                 try {
@@ -239,12 +239,12 @@ function RateMission({ request }: { request: Request }) {
   }
 
   return (
-    <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
-      <p className="text-sm font-medium text-[#0A2240] mb-2">Noter cette intervention</p>
+    <div className="mt-3 rounded-xl border border-[#C27D3D]/30 bg-[#141414] p-3">
+      <p className="mb-2 text-sm font-medium text-white">Noter cette intervention</p>
       <StarRating value={stars} onChange={setStars} size="lg" />
       <Button
         size="sm"
-        className="mt-3 rounded-xl bg-[#FF6600] hover:bg-[#e55a00]"
+        className="mt-3 rounded-xl"
         disabled={!stars || rate.isPending}
         onClick={async () => {
           try {
@@ -298,10 +298,10 @@ export function ClientEspacePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">
+        <h1 className="text-2xl font-bold text-white">
           Bonjour{profile?.name ? `, ${profile.name}` : ''}
         </h1>
-        <p className="text-muted-foreground text-sm">Suivez vos demandes, propositions et historique.</p>
+        <p className="text-sm text-[#A0A0A0]">Suivez vos demandes, propositions et historique.</p>
       </div>
 
       <StatsScrollRow cols={3}>
@@ -316,6 +316,12 @@ export function ClientEspacePage() {
           label="Notifications"
           value={unread.length}
           icon={<Inbox className="w-3.5 h-3.5" />}
+          style={{
+            background: '#C27D3D',
+            borderColor: '#D99A5B',
+            boxShadow: '0 12px 28px rgba(194, 125, 61, 0.28)',
+            color: '#0A0A0A',
+          }}
         />
         <StatBadge
           tone="muted"
@@ -326,15 +332,15 @@ export function ClientEspacePage() {
       </StatsScrollRow>
 
       {unread.length > 0 && (
-        <div className="app-card border-[#FF6600]/20 p-4 space-y-2">
-          <p className="font-medium text-foreground flex items-center gap-2 text-sm">
-            <Bell className="w-4 h-4 text-[#FF6600]" /> Nouveautés ({unread.length})
+        <div className="app-card border-[#C27D3D]/20 bg-[#141414] p-4 space-y-2">
+          <p className="flex items-center gap-2 text-sm font-medium text-white">
+            <Bell className="h-4 w-4 text-[#FEC18A]" /> Nouveautés ({unread.length})
           </p>
           {unread.slice(0, 5).map((n) => (
             <button
               key={n.id}
               type="button"
-              className="w-full text-left text-sm p-2 rounded-xl hover:bg-gray-50"
+              className="w-full rounded-xl p-2 text-left text-sm text-[#F5F5F5] hover:bg-white/5"
               onClick={async () => {
                 await markNotificationRead(n.id);
                 qc.invalidateQueries({ queryKey: ['notifications'] });
@@ -343,8 +349,8 @@ export function ClientEspacePage() {
                 }
               }}
             >
-              <span className="font-medium">{n.title}</span>
-              {n.body && <span className="block text-gray-500 text-xs">{n.body}</span>}
+              <span className="font-medium text-white">{n.title}</span>
+              {n.body && <span className="mt-1 block text-xs text-[#A0A0A0]">{n.body}</span>}
             </button>
           ))}
         </div>
@@ -352,7 +358,7 @@ export function ClientEspacePage() {
 
       {isLoading && (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-[#FF6600]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#FEC18A]" />
         </div>
       )}
 
@@ -366,28 +372,28 @@ export function ClientEspacePage() {
       )}
 
       {!isLoading && !requests?.length && !requestsError && (
-        <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center text-gray-500">
+        <div className="rounded-2xl border border-dashed border-[#2D2D2D] bg-[#141414] p-10 text-center text-[#A0A0A0]">
           Aucune demande pour l'instant.
         </div>
       )}
 
       {!!active?.length && (
         <section className="space-y-3">
-          <h2 className="font-semibold text-[#0A2240]">Demandes en cours</h2>
+          <h2 className="font-semibold text-white">Demandes en cours</h2>
           {active.map((r) => (
             <div
               key={r.id}
-              className={`bg-white rounded-2xl border p-4 shadow-sm ${
-                highlightRequestId === r.id ? 'border-[#FF6600] ring-2 ring-[#FF6600]/20' : 'border-gray-100'
+              className={`rounded-2xl border bg-[#141414] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)] ${
+                highlightRequestId === r.id ? 'border-[#C27D3D]/50 ring-2 ring-[#C27D3D]/20' : 'border-[#2D2D2D]'
               }`}
             >
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="font-semibold text-[#0A2240]">{r.services?.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-semibold text-white">{r.services?.name}</p>
+                  <p className="text-sm text-[#A0A0A0]">
                     {r.zones?.name} · {r.quartier}
                   </p>
-                  <p className="text-sm text-gray-600 mt-1">{r.description}</p>
+                  <p className="mt-1 text-sm text-[#F5F5F5]">{r.description}</p>
                 </div>
                 <Badge variant="secondary">{statusLabel[r.status] || r.status}</Badge>
               </div>
@@ -405,7 +411,7 @@ export function ClientEspacePage() {
 
               {r.status === 'new' && (
                 <div className="mt-3">
-                  <p className="text-sm font-medium text-[#0A2240] mb-1">Propositions reçues</p>
+                  <p className="mb-1 text-sm font-medium text-white">Propositions reçues</p>
                   <ProposalList requestId={r.id} />
                 </div>
               )}
@@ -444,27 +450,27 @@ export function ClientEspacePage() {
 
       {!!history?.length && (
         <section className="space-y-3">
-          <h2 className="font-semibold text-[#0A2240]">Historique</h2>
+          <h2 className="font-semibold text-white">Historique</h2>
           {history.map((r) => (
-            <div key={r.id} className="bg-white rounded-2xl border border-gray-100 p-4">
+            <div key={r.id} className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-4">
               <div className="flex flex-wrap justify-between gap-2">
                 <div>
-                  <p className="font-semibold text-[#0A2240]">{r.services?.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-semibold text-white">{r.services?.name}</p>
+                  <p className="text-sm text-[#A0A0A0]">
                     {new Date(r.created_at).toLocaleDateString('fr-FR')} · {r.zones?.name}
                   </p>
                   {r.workers && (
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="mt-2 flex items-center gap-2">
                       {r.workers.photo_url ? (
                         <img src={r.workers.photo_url} alt="" className="w-8 h-8 rounded-full object-cover" />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-[#0A2240] text-white text-xs flex items-center justify-center">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1C1C1C] text-xs text-white">
                           {r.workers.name.charAt(0)}
                         </div>
                       )}
                       <div>
-                        <p className="text-sm font-medium">{r.workers.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-sm font-medium text-white">{r.workers.name}</p>
+                        <p className="text-xs text-[#A0A0A0]">
                           {r.workers.services?.name}
                           {r.workers.zones?.name ? ` · ${r.workers.zones.name}` : ''}
                         </p>
@@ -472,7 +478,7 @@ export function ClientEspacePage() {
                     </div>
                   )}
                   {r.price != null && (
-                    <p className="text-sm text-[#FF6600] font-semibold mt-1">
+                    <p className="mt-1 text-sm font-semibold text-[#FEC18A]">
                       {Number(r.price).toLocaleString('fr-FR')} FCFA
                     </p>
                   )}
@@ -492,8 +498,8 @@ export function ClientEspacePage() {
         </section>
       )}
 
-      <p className="text-xs text-gray-400">
-        Astuce : ajoutez une photo depuis <Link className="text-[#FF6600]" to="/espace/profil">Mon profil</Link> si
+      <p className="text-xs text-[#A0A0A0]">
+        Astuce : ajoutez une photo depuis <Link className="text-[#FEC18A] hover:text-[#D99A5B]" to="/espace/profil">Mon profil</Link> si
         vous êtes travailleur ou partenaire.
       </p>
     </div>

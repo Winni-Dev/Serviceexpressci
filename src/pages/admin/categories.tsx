@@ -219,12 +219,12 @@ export function CategoriesPage() {
                   <Trash2 className="w-3 h-3 text-red-400" />
                 </Button>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-[#FF6600]/10 flex items-center justify-center mb-3">
-                <FolderOpen className="w-6 h-6 text-[#FF6600]" />
+              <div className="w-12 h-12 rounded-2xl bg-[rgba(194,125,61,0.15)] border border-[#C27D3D]/30 flex items-center justify-center mb-3">
+                <FolderOpen className="w-6 h-6 text-[#D99A5B]" />
               </div>
-              <h3 className="font-semibold text-[#0A2240]">{cat.name}</h3>
+              <h3 className="font-semibold text-white">{cat.name}</h3>
               {cat.description && (
-                <p className="text-xs text-gray-500 mt-1 line-clamp-2">{cat.description}</p>
+                <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{cat.description}</p>
               )}
               <p className="text-xs text-gray-400 mt-2">
                 {countByCategory.get(cat.id) || 0} service(s)

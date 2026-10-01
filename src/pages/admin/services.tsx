@@ -403,7 +403,7 @@ export function ServicesPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="rounded-lg h-8 w-8 p-0 bg-[#0A2240] text-white border-2 border-white/80 shadow-lg hover:bg-[#FF6600] hover:text-white"
+                      className="rounded-lg h-7 w-7 p-0 bg-[#18181B] text-zinc-300 border border-[#27272A] shadow-md hover:bg-[#C27D3D] hover:text-black"
                       onClick={() => openEdit(service)}
                       title="Modifier"
                     >
@@ -412,7 +412,7 @@ export function ServicesPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="rounded-lg h-8 w-8 p-0 bg-[#0A2240] text-white border-2 border-white/80 shadow-lg hover:bg-red-500 hover:text-white"
+                      className="rounded-lg h-7 w-7 p-0 bg-[#18181B] text-zinc-300 border border-[#27272A] shadow-md hover:bg-[#FB7185] hover:text-white"
                       onClick={() => handleDelete(service.id)}
                       title="Supprimer"
                     >
@@ -421,12 +421,12 @@ export function ServicesPage() {
                   </div>
                 </div>
                 <div className="p-3 text-center space-y-1">
-                  <h3 className="font-semibold text-[#0A2240] text-sm">{service.name}</h3>
-                  <p className="text-[11px] text-gray-400">
+                  <h3 className="font-semibold text-white text-sm">{service.name}</h3>
+                  <p className="text-[11px] text-zinc-400">
                     {service.service_categories?.name || 'Sans catégorie'}
                   </p>
                   {service.description && (
-                    <p className="text-xs text-gray-500 line-clamp-2">{service.description}</p>
+                    <p className="text-xs text-zinc-400 line-clamp-2">{service.description}</p>
                   )}
                   {!searchTerm && (
                     <div className="flex justify-center gap-1 pt-1">

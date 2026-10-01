@@ -37,46 +37,46 @@ export function ServiceBadgeCard({ service, index = 0, perRow = 4 }: ServiceBadg
         onClick={() => openRequest(service)}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openRequest(service); }}
         className={
-          `group h-full flex flex-col overflow-hidden rounded-xl
-          border-2 border-[#0A2240]/12
-          bg-gradient-to-b from-white to-[#f6f8fb]
-          shadow-[0_6px_18px_rgba(10,34,64,0.08),0_1px_0_rgba(10,34,64,0.04)]
-          hover:border-[#FF6600]/60
-          hover:shadow-[0_18px_36px_rgba(10,34,64,0.16),0_0_0_2px_rgba(255,102,0,0.08)]
+          `group h-full flex flex-col overflow-hidden rounded-[22px]
+          border border-[#2D2D2D]
+          bg-[#141414]
+          shadow-[0_10px_30px_rgba(0,0,0,0.28)]
+          hover:border-[#C27D3D]/50
+          hover:shadow-[0_18px_36px_rgba(0,0,0,0.35)]
           hover:-translate-y-1
           transition-all duration-350 ease-in-out
           cursor-pointer`}
       >
-        <div className="relative aspect-[5/4] w-full overflow-hidden bg-gradient-to-br from-[#0A2240]/08 to-[#FF6600]/12 border-b-2 border-[#0A2240]/08">
+        <div className="relative aspect-[5/4] w-full overflow-hidden border-b border-[#2D2D2D] bg-[#0A0A0A]">
           {service.image_url ? (
             <img
               src={service.image_url}
               alt={service.name}
-              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-[1.04] transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 rounded-xl bg-[#e8ebf0] border border-[#0A2240]/10 shadow-sm flex items-center justify-center">
-                <Icon className={`w-6 h-6 ${getServiceColor(service.icon)}`} />
+            <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(194,125,61,0.18),_transparent_45%)]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#C27D3D]/25 bg-[#1C1C1C] shadow-sm shadow-black/20">
+                <Icon className={`h-6 w-6 ${getServiceColor(service.icon)}`} />
               </div>
             </div>
           )}
         </div>
 
-          <div className="flex flex-col flex-1 px-4 pt-4 pb-4 text-center">
-          <h3 className="font-semibold text-[#0A2240] text-sm leading-snug mb-1 line-clamp-1">
+        <div className="flex flex-1 flex-col px-4 pb-4 pt-4 text-center">
+          <h3 className="mb-1 text-sm font-semibold leading-snug text-white line-clamp-1">
             {service.name}
           </h3>
-          <p className="text-[#5a6578] mb-3 text-[11px] leading-relaxed line-clamp-2 min-h-[2.25rem]">
+          <p className="mb-3 min-h-[2.25rem] text-[11px] leading-relaxed text-[#A0A0A0] line-clamp-2">
             {description}
           </p>
           <Button
             size="sm"
-            className="rounded-lg w-full text-xs h-8 bg-[#FF6600] hover:bg-[#e55a00] shadow-sm shadow-[#FF6600]/25 mt-auto"
-              onClick={(e) => { e.stopPropagation(); openRequest(service); }}
+            className="mt-auto h-8 w-full rounded-lg text-[11px] font-medium"
+            onClick={(e) => { e.stopPropagation(); openRequest(service); }}
           >
             Commander
-            <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
           </Button>
         </div>
       </div>

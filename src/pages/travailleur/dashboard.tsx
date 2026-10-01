@@ -63,14 +63,14 @@ export function WorkerDashboardPage() {
             <button
               type="button"
               onClick={() => setPeriodMode('today')}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium ${periodMode === 'today' ? 'bg-[#0A2240] text-white' : 'bg-gray-100 text-gray-600'}`}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium ${periodMode === 'today' ? 'bg-[#C27D3D] text-[#0A0A0A]' : 'bg-[#141414] text-[#F5F5F5] border border-[#2D2D2D]'}`}
             >
               Aujourd'hui
             </button>
             <button
               type="button"
               onClick={() => setPeriodMode('all')}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium ${periodMode === 'all' ? 'bg-[#0A2240] text-white' : 'bg-gray-100 text-gray-600'}`}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium ${periodMode === 'all' ? 'bg-[#C27D3D] text-[#0A0A0A]' : 'bg-[#141414] text-[#F5F5F5] border border-[#2D2D2D]'}`}
             >
               Tout
             </button>
@@ -89,9 +89,34 @@ export function WorkerDashboardPage() {
 
         <div>
           <StatsScrollRow cols={2} className="lg:gap-6">
-            <StatBadge masked={masked} tone="accent" label="Montant payé" value={formatFcfa(paidTotal)} icon={<Wallet className="w-3.5 h-3.5" />} className="lg:w-[320px]" />
+            <StatBadge
+              masked={masked}
+              tone="accent"
+              label="Montant payé"
+              value={formatFcfa(paidTotal)}
+              icon={<Wallet className="w-3.5 h-3.5" />}
+              className="lg:w-[320px]"
+              style={{
+                background: '#C27D3D',
+                borderColor: '#D99A5B',
+                boxShadow: '0 12px 28px rgba(194, 125, 61, 0.28)',
+                color: '#0A0A0A',
+              }}
+            />
             <StatBadge masked={masked} tone="brand" label="À recevoir" value={formatFcfa(unpaidTotal)} icon={<Receipt className="w-3.5 h-3.5" />} className="lg:w-[320px]" />
-            <StatBadge masked={masked} tone="success" label="Prélèvements" value={formatFcfa(levies)} className="lg:w-[320px]" />
+            <StatBadge
+              masked={masked}
+              tone="success"
+              label="Prélèvements"
+              value={formatFcfa(levies)}
+              className="lg:w-[320px]"
+              style={{
+                background: '#22C55E',
+                borderColor: '#4ADE80',
+                boxShadow: '0 12px 28px rgba(34, 197, 94, 0.28)',
+                color: '#FFFFFF',
+              }}
+            />
             <StatBadge masked={masked} tone="muted" label="Jours d'activité" value={days} hint={`${doneMissions} mission(s) terminée(s)`} icon={<CalendarDays className="w-3.5 h-3.5" />} className="lg:w-[320px]" />
           </StatsScrollRow>
         </div>

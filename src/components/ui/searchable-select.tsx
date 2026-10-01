@@ -224,11 +224,10 @@ export function SearchableSelect({
         disabled={disabled}
         onClick={handleButtonClick}
         className={cn(
-          'flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-left',
-          'focus:outline-none focus:ring-2 focus:ring-[#FF6600] focus:border-transparent',
+          'flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-[#2D2D2D] bg-[#262626] px-3 py-2 text-sm text-left text-white',
+          'focus:outline-none focus:ring-2 focus:ring-[#C27D3D]/30 focus:border-[#C27D3D]',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          !selectedLabel && 'text-gray-400',
-          // Éviter le zoom sur mobile
+          !selectedLabel && 'text-[#707070]',
           'text-base sm:text-sm'
         )}
         style={{ fontSize: '16px' }}
@@ -240,18 +239,17 @@ export function SearchableSelect({
       </button>
 
       {open && (
-        <div className="absolute z-[100] mt-1 w-full rounded-lg border bg-white shadow-lg">
-          <div className="p-2 border-b">
+        <div className="absolute z-[100] mt-1 w-full rounded-xl border border-[#2D2D2D] bg-[#141414] shadow-[0_20px_40px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-[#2D2D2D] p-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#707070]" />
               <Input
                 ref={inputRef}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="pl-8 h-9 text-base sm:text-sm"
+                className="h-9 pl-8 text-base sm:text-sm"
                 style={{ fontSize: '16px' }}
-                // Empêcher le zoom sur mobile
                 autoFocus
                 onFocus={(e) => {
                   e.target.style.fontSize = '16px';
@@ -261,7 +259,7 @@ export function SearchableSelect({
           </div>
           <ul className="max-h-52 overflow-y-auto py-1">
             {filtered.length === 0 ? (
-              <li className="px-3 py-2 text-sm text-gray-500">{emptyMessage}</li>
+              <li className="px-3 py-2 text-sm text-[#A0A0A0]">{emptyMessage}</li>
             ) : (
               filtered.map((option) => (
                 <li key={option.value}>
@@ -269,11 +267,11 @@ export function SearchableSelect({
                     type="button"
                     onClick={() => handleSelect(option.value)}
                     className={cn(
-                      'flex w-full items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-100',
-                      value === option.value && 'bg-[#FF6600]/10 text-[#FF6600]'
+                      'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white transition-colors hover:bg-white/5',
+                      value === option.value && 'bg-[#C27D3D]/10 text-[#FEC18A]'
                     )}
                   >
-                    <Check className={cn('w-4 h-4 shrink-0', value === option.value ? 'opacity-100' : 'opacity-0')} />
+                    <Check className={cn('h-4 w-4 shrink-0', value === option.value ? 'opacity-100' : 'opacity-0')} />
                     <span className="min-w-0 flex-1 break-words whitespace-normal text-left">
                       {option.label}
                     </span>

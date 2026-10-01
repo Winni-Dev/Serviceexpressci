@@ -73,6 +73,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -90,16 +91,22 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        // Charte Service Express CI
-        navy: {
-          DEFAULT: "#0A2240",
-          deep: "#061729",
-          soft: "#143a66",
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          elevated: "hsl(var(--surface-elevated))",
         },
+        text: {
+          DEFAULT: "hsl(var(--text))",
+          secondary: "hsl(var(--text-secondary))",
+        },
+        success: "hsl(var(--success))",
+        danger: "hsl(var(--danger))",
+        warning: "hsl(var(--warning))",
         brand: {
-          DEFAULT: "#FF6600",
-          soft: "#ff8a3d",
-          deep: "#e55a00",
+          DEFAULT: "#C27D3D",
+          light: "#D99A5B",
+          champagne: "#FEC18A",
+          deep: "#8B5A30",
         },
       },
       fontFamily: {

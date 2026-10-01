@@ -308,15 +308,15 @@ export function ManagersPage() {
                   <img
                     src={manager.photo_url || getAvatarUrl(manager.gender)}
                     alt={manager.name}
-                    className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#FF6600]/20 shrink-0"
+                    className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#C27D3D]/25 shrink-0"
                   />
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-[#0A2240] truncate">{manager.name}</h3>
+                    <h3 className="font-semibold text-white truncate">{manager.name}</h3>
                     <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                      <span className="inline-flex items-center gap-1 text-[10px] text-[#FF6600] font-medium bg-orange-50 px-2 py-0.5 rounded-full">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-[#D99A5B] font-medium bg-[rgba(194,125,61,0.15)] border border-[#C27D3D]/30 px-2 py-0.5 rounded-full">
                         <Shield className="w-3 h-3" />partenaire
                       </span>
-                      <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-[10px] text-zinc-400 bg-[#18181B] border border-[#27272A] px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {formatCardDate(manager.created_at)}
                       </span>

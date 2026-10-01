@@ -94,12 +94,12 @@ export function AccountantsPage() {
             <EntityCard key={accountant.id}>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center">
-                    <Calculator className="w-6 h-6 text-emerald-600" />
+                  <div className="w-12 h-12 bg-[#34D399]/15 border border-[#34D399]/30 rounded-xl flex items-center justify-center">
+                    <Calculator className="w-6 h-6 text-[#34D399]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0A2240]">Comptable</h3>
-                    <div className="flex items-center gap-1 text-sm text-gray-500 mt-0.5">
+                    <h3 className="font-semibold text-white">Comptable</h3>
+                    <div className="flex items-center gap-1 text-sm text-zinc-400 mt-0.5">
                       <Mail className="w-3 h-3" /><span className="truncate">{accountant.email}</span>
                     </div>
                   </div>

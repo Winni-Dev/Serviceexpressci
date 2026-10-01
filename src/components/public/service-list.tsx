@@ -328,9 +328,9 @@ export function ServiceList({
 
   const pillBase =
     'px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-300';
-  const pillActive = 'bg-foreground text-background border-foreground';
+  const pillActive = 'bg-[#C27D3D] text-[#0A0A0A] border-[#C27D3D] shadow-[0_10px_20px_rgba(194,125,61,0.2)]';
   const pillIdle =
-    'bg-transparent text-foreground/70 border-border/70 hover:border-foreground/30 hover:text-foreground';
+    'bg-[#141414] text-[#F5F5F5]/70 border-[#2D2D2D] hover:border-[#C27D3D]/40 hover:text-white';
 
   return (
     <div className="space-y-7">

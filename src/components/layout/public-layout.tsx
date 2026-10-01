@@ -40,11 +40,7 @@ export function PublicLayout() {
   const AuthButtons = ({ mobile = false }: { mobile?: boolean }) =>
     session ? (
       <div className={mobile ? 'flex flex-col gap-2' : 'flex items-center gap-2 ml-2'}>
-        <Button
-          size="sm"
-          className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00]"
-          onClick={() => navigate(spaceLink)}
-        >
+        <Button size="sm" onClick={() => navigate(spaceLink)}>
           <User className="w-4 h-4 mr-1" />
           Mon espace
         </Button>
@@ -70,11 +66,7 @@ export function PublicLayout() {
         >
           Connexion
         </Button>
-        <Button
-          size="sm"
-          className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00]"
-          onClick={() => navigate('/inscription')}
-        >
+        <Button size="sm" onClick={() => navigate('/inscription')}>
           S'inscrire
         </Button>
       </div>
@@ -82,12 +74,12 @@ export function PublicLayout() {
 
   return (
     <RequestModalProvider>
-      <div className="min-h-screen bg-[#f8f9fb] flex flex-col">
+      <div className="min-h-screen bg-[#000000] text-white flex flex-col">
         <header
-          className={`sticky top-0 z-50 transition-all duration-300 text-white border-b border-white/10 ${
+          className={`sticky top-0 z-50 transition-all duration-300 border-b ${
             scrolled
-              ? 'bg-[#0A2240]/95 backdrop-blur-xl shadow-lg shadow-[#0A2240]/20'
-              : 'bg-[#0A2240]'
+              ? 'bg-[#0A0A0A]/90 backdrop-blur-xl shadow-[0_12px_32px_rgba(0,0,0,0.32)] border-[#2D2D2D]'
+              : 'bg-[#0A0A0A] border-[#1C1C1C]'
           }`}
         >
           <div className="container mx-auto px-4">
@@ -104,8 +96,8 @@ export function PublicLayout() {
                       to={item.to}
                       className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
                         isActive
-                          ? 'text-[#FF6600] bg-[#FF6600]/10'
-                          : 'text-white/70 hover:text-white hover:bg-white/5'
+                          ? 'text-[#FEC18A] bg-[#C27D3D]/10 border border-[#C27D3D]/20'
+                          : 'text-[#F5F5F5]/70 hover:text-white hover:bg-white/5'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -116,7 +108,7 @@ export function PublicLayout() {
                 <AuthButtons />
                 <Button
                   size="sm"
-                  className="rounded-xl bg-gradient-to-r from-[#FF6600] to-[#e55a00] ml-2"
+                  className="ml-2"
                   asChild
                 >
                   <a href={urgencyLink} target="_blank" rel="noopener noreferrer">
@@ -127,7 +119,7 @@ export function PublicLayout() {
               </nav>
 
               <button
-                className="md:hidden p-2 rounded-xl hover:bg-white/10"
+                className="md:hidden p-2 rounded-xl hover:bg-white/5 border border-[#2D2D2D]"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Menu"
               >
@@ -141,7 +133,7 @@ export function PublicLayout() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="md:hidden overflow-hidden border-t border-white/10"
+                  className="md:hidden overflow-hidden border-t border-[#2D2D2D]"
                 >
                   <nav className="py-4 space-y-1">
                     {navLinks.map((item) => {
@@ -152,7 +144,7 @@ export function PublicLayout() {
                           key={item.to}
                           to={item.to}
                           className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                            isActive ? 'bg-[#FF6600]/10 text-[#FF6600]' : 'text-white/70'
+                            isActive ? 'bg-[#C27D3D]/10 text-[#FEC18A]' : 'text-[#F5F5F5]/70'
                           }`}
                         >
                           <Icon className="w-5 h-5" />
@@ -163,7 +155,7 @@ export function PublicLayout() {
                     })}
                     <div className="px-4 pt-2 space-y-2">
                       <AuthButtons mobile />
-                      <Button className="w-full rounded-xl bg-[#FF6600]" asChild>
+                      <Button className="w-full" asChild>
                         <a href={urgencyLink} target="_blank" rel="noopener noreferrer">
                           <Phone className="w-4 h-4 mr-2" />
                           Urgence WhatsApp
@@ -181,30 +173,30 @@ export function PublicLayout() {
           <Outlet />
         </main>
 
-        <footer className="bg-[#0A2240] text-white py-12 mt-auto border-t border-white/5">
+        <footer className="bg-[#141414] text-white py-12 mt-auto border-t border-[#2D2D2D]">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <BrandLogo textClassName="text-white text-base" size="sm" />
-                <p className="text-white/50 text-sm mt-3">
+                <p className="text-[#A0A0A0] text-sm mt-3">
                   Votre solution de services à domicile en Côte d'Ivoire.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-6 md:justify-end text-sm text-white/50">
+              <div className="flex flex-wrap gap-6 md:justify-end text-sm text-[#A0A0A0]">
                 {navLinks.map((item) => (
-                  <Link key={item.to} to={item.to} className="hover:text-[#FF6600]">
+                  <Link key={item.to} to={item.to} className="hover:text-[#FEC18A] transition-colors">
                     {item.label}
                   </Link>
                 ))}
-                <Link to="/inscription" className="hover:text-[#FF6600]">
+                <Link to="/inscription" className="hover:text-[#FEC18A] transition-colors">
                   S'inscrire
                 </Link>
-                <a href={urgencyLink} target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6600]">
+                <a href={urgencyLink} target="_blank" rel="noopener noreferrer" className="hover:text-[#FEC18A] transition-colors">
                   Urgence
                 </a>
               </div>
             </div>
-            <div className="border-t border-white/5 mt-10 pt-6 text-center text-white/30 text-sm">
+            <div className="border-t border-[#2D2D2D] mt-10 pt-6 text-center text-[#707070] text-sm">
               &copy; {new Date().getFullYear()} Service Express CI. Tous droits réservés.
             </div>
           </div>

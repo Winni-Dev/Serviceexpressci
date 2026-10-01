@@ -406,10 +406,10 @@ export function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#0A2240] via-[#0d2d52] to-[#0A2240] text-white py-12 md:py-20 overflow-hidden">
+      <section className="relative bg-[#0A0A0A] text-white py-12 md:py-20 overflow-hidden">
         {/* Effets de fond */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF6600]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FF6600]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C27D3D]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FEC18A]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4" />
 
         <div className="container mx-auto px-4 relative">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -422,23 +422,23 @@ export function HomePage() {
             >
               <div className="relative max-w-sm md:max-w-md mx-auto lg:mx-0">
                 {/* Cadre décoratif extérieur */}
-                <div className="absolute -top-4 -right-4 w-full h-full rounded-[40px] border border-[#FF6600]/20" />
-                <div className="absolute -bottom-4 -left-4 w-full h-full rounded-[40px] border border-[#FF6600]/10" />
+                <div className="absolute -top-4 -right-4 w-full h-full rounded-[40px] border border-[#C27D3D]/20" />
+                <div className="absolute -bottom-4 -left-4 w-full h-full rounded-[40px] border border-[#C27D3D]/10" />
 
                 {/* Conteneur image avec bordure */}
-                <div className="relative rounded-[40px] overflow-hidden shadow-2xl shadow-[#FF6600]/15">
+                <div className="relative rounded-[40px] overflow-hidden shadow-[0_25px_58px_rgba(0,0,0,0.45)] border border-[#2D2D2D]">
                   {/* Bordure dégradée - côté droit */}
-                  <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-[#FF6600] via-[#FF6600]/60 to-transparent z-10" />
+                  <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-[#C27D3D] via-[#D99A5B]/60 to-transparent z-10" />
                   
                   {/* Bordure supérieure */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#FF6600] to-[#FF6600]/30 z-10" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#C27D3D] to-[#FEC18A]/30 z-10" />
 
                   {/* Coins décoratifs */}
-                  <div className="absolute bottom-0 left-0 w-16 h-16 border-l-2 border-b-2 border-[#FF6600]/30 rounded-bl-[40px] z-10" />
-                  <div className="absolute top-0 right-0 w-16 h-16 border-r-2 border-t-2 border-[#FF6600]/30 rounded-tr-[40px] z-10" />
+                  <div className="absolute bottom-0 left-0 w-16 h-16 border-l-2 border-b-2 border-[#C27D3D]/30 rounded-bl-[40px] z-10" />
+                  <div className="absolute top-0 right-0 w-16 h-16 border-r-2 border-t-2 border-[#C27D3D]/30 rounded-tr-[40px] z-10" />
 
                   {/* Overlay subtil */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0A2240]/5 via-transparent to-[#FF6600]/5 z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0A0A0A]/10 via-transparent to-[#C27D3D]/10 z-10" />
 
                   {/* Image */}
                   <img 
@@ -452,14 +452,14 @@ export function HomePage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="absolute bottom-4 right-4 bg-[#0A2240]/90 backdrop-blur-sm rounded-xl px-3 py-2 border border-[#FF6600]/30 z-20 flex items-center gap-2"
+                    className="absolute bottom-4 right-4 bg-[#141414]/90 backdrop-blur-sm rounded-xl px-3 py-2 border border-[#C27D3D]/30 z-20 flex items-center gap-2"
                   >
-                    <div className="w-8 h-8 bg-[#FF6600] rounded-lg flex items-center justify-center">
-                      <Clock className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 bg-[#C27D3D] rounded-lg flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-[#0A0A0A]" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold">Intervention express</p>
-                      <p className="text-[10px] text-white/60">En moins de 24h</p>
+                      <p className="text-xs font-semibold text-white">Intervention express</p>
+                      <p className="text-[10px] text-[#A0A0A0]">En moins de 24h</p>
                     </div>
                   </motion.div>
                 </div>
@@ -477,15 +477,15 @@ export function HomePage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 bg-[#FF6600]/20 text-[#FF6600] px-3 py-1.5 rounded-full text-xs font-medium mb-5"
+                className="inline-flex items-center gap-2 bg-[#C27D3D]/10 text-[#FEC18A] px-3 py-1.5 rounded-full text-xs font-medium mb-5 border border-[#C27D3D]/20"
               >
-                <span className="w-1.5 h-1.5 bg-[#FF6600] rounded-full animate-pulse" />
+                <span className="w-1.5 h-1.5 bg-[#C27D3D] rounded-full animate-pulse" />
                 Service disponible 24h/24
               </motion.div>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight text-white">
                 Services à domicile{' '}
-                <span className="text-[#FF6600] relative inline-block">
+                <span className="text-[#FEC18A] relative inline-block">
                   rapides et fiables
                   {/* Soulignement courbé */}
                   <svg 
@@ -496,7 +496,7 @@ export function HomePage() {
                   >
                     <path 
                       d="M2 7.5C75 2.5 150 2.5 298 7.5" 
-                      stroke="#FF6600" 
+                      stroke="#C27D3D" 
                       strokeWidth="3" 
                       strokeLinecap="round"
                       strokeDasharray="300"
@@ -522,7 +522,7 @@ export function HomePage() {
               <div className="flex flex-wrap gap-3">
                 <Button 
                   size="default" 
-                  className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00] shadow-lg shadow-[#FF6600]/25 hover:shadow-[#FF6600]/40 transition-all duration-300 group"
+                  className="rounded-xl bg-[#C27D3D] hover:bg-[#D99A5B] shadow-lg shadow-[#C27D3D]/25 hover:shadow-[#C27D3D]/40 transition-all duration-300 group"
                   onClick={() => openRequest()}
                 >
                   Faire une demande
@@ -553,7 +553,7 @@ export function HomePage() {
                   
                   return (
                     <div key={index}>
-                      <span className="text-xl font-bold text-[#FF6600]">
+                      <span className="text-xl font-bold text-[#FEC18A]">
                         <AnimatedCounter 
                           end={stat.value} 
                           duration={2000} 
@@ -572,23 +572,23 @@ export function HomePage() {
       </section>
 
       {/* Section Nos services + catégories */}
-      <section className="py-16 md:py-20 bg-[#f8f9fb]">
+      <section className="py-16 md:py-20 bg-[#0A0A0A]">
         <div className="container mx-auto px-4">
           <HomeServicesSections />
         </div>
       </section>
 
       {/* Section Pourquoi nous choisir */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-[#141414]">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-10"
           >
-            <span className="text-[#FF6600] font-semibold text-xs uppercase tracking-wider">Nos atouts</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#0A2240] mt-1 mb-2">Pourquoi nous choisir ?</h2>
-            <div className="w-12 h-0.5 bg-[#FF6600] mx-auto rounded-full" />
+            <span className="text-[#FEC18A] font-semibold text-xs uppercase tracking-wider">Nos atouts</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mt-1 mb-2">Pourquoi nous choisir ?</h2>
+            <div className="w-12 h-0.5 bg-[#C27D3D] mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -598,13 +598,13 @@ export function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group text-center rounded-2xl bg-[#f8f9fb] p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="group text-center rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] p-6 hover:shadow-[0_18px_36px_rgba(0,0,0,0.28)] transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="w-14 h-14 bg-[#FF6600]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#FF6600]/20 transition-all duration-300">
-                  <feature.icon className="w-7 h-7 text-[#FF6600]" />
+                <div className="w-14 h-14 bg-[#C27D3D]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#C27D3D]/15 transition-all duration-300 border border-[#C27D3D]/15">
+                  <feature.icon className="w-7 h-7 text-[#FEC18A]" />
                 </div>
-                <h3 className="font-semibold text-lg text-[#0A2240] mb-1">{feature.title}</h3>
-                <p className="text-gray-500 text-sm">{feature.description}</p>
+                <h3 className="font-semibold text-lg text-white mb-1">{feature.title}</h3>
+                <p className="text-[#A0A0A0] text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -612,9 +612,9 @@ export function HomePage() {
       </section>
 
       {/* Section CTA */}
-      <section className="relative bg-gradient-to-r from-[#FF6600] to-[#e55a00] text-white py-12 overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+      <section className="relative bg-gradient-to-r from-[#141414] via-[#1E1E1E] to-[#141414] text-white py-12 overflow-hidden border-t border-[#2D2D2D]">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-[#C27D3D]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#FEC18A]/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
         
         <div className="container mx-auto px-4 text-center relative">
           <motion.div
@@ -628,7 +628,7 @@ export function HomePage() {
             <div className="flex flex-wrap justify-center gap-3">
               <Button
                 size="default"
-                className="rounded-xl bg-white text-[#FF6600] hover:bg-gray-100 shadow-lg group"
+                className="shadow-[0_12px_28px_rgba(194,125,61,0.24)] group"
                 onClick={() => openRequest()}
               >
                 Faire une demande
@@ -637,7 +637,7 @@ export function HomePage() {
               <Button
                 size="default"
                 variant="outline"
-                className="rounded-xl border-white/40 bg-transparent text-white hover:bg-white/10"
+                className="rounded-xl border-[#C27D3D]/40 bg-transparent text-white hover:bg-[#C27D3D]/10"
                 asChild
               >
                 <Link to="/services">Voir les services</Link>

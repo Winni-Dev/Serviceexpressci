@@ -369,11 +369,11 @@ import { getRequestPriceAdjustments } from '@/services/api';
 import type { Request } from '@/types';
 
 const statusColors: Record<string, string> = {
-  new: 'bg-amber-100 text-amber-800 border-amber-200',
-  assigned: 'bg-blue-100 text-blue-800 border-blue-200',
-  in_progress: 'bg-orange-100 text-orange-800 border-orange-200',
-  done: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-  cancelled: 'bg-red-100 text-red-800 border-red-200',
+  new: 'border-[#C27D3D]/30 bg-[rgba(194,125,61,0.15)] text-[#D99A5B]',
+  assigned: 'border-[#22D3EE]/30 bg-[#22D3EE]/12 text-[#22D3EE]',
+  in_progress: 'border-[#C27D3D]/30 bg-[rgba(194,125,61,0.15)] text-[#D99A5B]',
+  done: 'border-[#34D399]/30 bg-[#34D399]/12 text-[#34D399]',
+  cancelled: 'border-[#FB7185]/30 bg-[#FB7185]/12 text-[#FB7185]',
 };
 
 const statusLabels: Record<string, string> = {
@@ -478,7 +478,7 @@ export function RequestsPage() {
 
   const handleStatusChange = async (requestId: string, newStatus: string, workerId?: string | null) => {
     const request = requests?.find((r) => r.id === requestId);
-    
+
     // Si un workerId est fourni, vérifier qu'il appartient à la zone
     if (workerId && workerId !== 'none' && request) {
       const worker = workers?.find((w) => w.id === workerId);
@@ -491,20 +491,20 @@ export function RequestsPage() {
     try {
       // Si workerId est 'none' ou null, on passe null pour désassigner
       const finalWorkerId = workerId === 'none' || workerId === null ? null : workerId;
-      
-      await updateStatus.mutateAsync({ 
-        id: requestId, 
-        status: newStatus, 
+
+      await updateStatus.mutateAsync({
+        id: requestId,
+        status: newStatus,
         workerId: finalWorkerId
       });
-      
+
       setDetailRequest((prev) =>
         prev?.id === requestId
-          ? { 
-              ...prev, 
-              status: newStatus as Request['status'], 
-              worker_id: finalWorkerId
-            }
+          ? {
+            ...prev,
+            status: newStatus as Request['status'],
+            worker_id: finalWorkerId
+          }
           : prev
       );
     } catch (error) {
@@ -515,12 +515,12 @@ export function RequestsPage() {
   // Fonction pour désassigner un travailleur
   const handleUnassignWorker = async (requestId: string) => {
     try {
-      await updateStatus.mutateAsync({ 
-        id: requestId, 
+      await updateStatus.mutateAsync({
+        id: requestId,
         status: 'assigned', // On garde le statut assigné
         workerId: null // On passe null pour désassigner
       });
-      
+
       // Mettre à jour l'état local
       setDetailRequest((prev) =>
         prev?.id === requestId
@@ -604,32 +604,32 @@ export function RequestsPage() {
                 <TableRow key={request.id} className="hover:bg-gray-50/50">
                   <TableCell>
                     <div>
-                      <p className="font-medium text-sm text-[#0A2240]">{request.name}</p>
-                      <p className="text-xs text-gray-500">{request.phone}</p>
+                      <p className="font-medium text-sm text-white">{request.name}</p>
+                      <p className="text-xs text-zinc-500">{request.phone}</p>
                     </div>
                   </TableCell>
-                  <TableCell className="text-sm">{request.services?.name}</TableCell>
-                  <TableCell className="text-sm">{request.zones?.name}</TableCell>
-                  <TableCell className="text-sm">{request.quartier}</TableCell>
+                  <TableCell className="text-sm text-zinc-200">{request.services?.name}</TableCell>
+                  <TableCell className="text-sm text-zinc-200">{request.zones?.name}</TableCell>
+                  <TableCell className="text-sm text-zinc-200">{request.quartier}</TableCell>
                   <TableCell>
                     <Badge className={statusColors[request.status]}>
                       {statusLabels[request.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-gray-600">
-                    {request.workers?.name || <span className="text-gray-400">Non assigné</span>}
+                  <TableCell className="text-sm text-zinc-300">
+                    {request.workers?.name || <span className="text-zinc-500">Non assigné</span>}
                   </TableCell>
-                  <TableCell className="text-sm text-gray-500">
+                  <TableCell className="text-sm text-zinc-400">
                     {format(new Date(request.created_at), 'dd MMM yyyy HH:mm', { locale: fr })}
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="rounded-lg h-8 w-8 p-0"
+                      className="rounded-lg h-7 w-7 p-0 border-[#27272A] bg-[#18181B] hover:text-[#D99A5B]"
                       onClick={() => setDetailRequest(request)}
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-3.5 h-3.5" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -641,9 +641,9 @@ export function RequestsPage() {
 
       {activeRequest && (
         <Dialog open={!!activeRequest} onOpenChange={(open) => !open && setDetailRequest(null)}>
-          <ScrollableDialogContent className="sm:max-w-md rounded-2xl border-0 shadow-2xl p-0 gap-0">
+          <ScrollableDialogContent className="sm:max-w-md rounded-2xl border border-[#27272A] bg-[#121212] shadow-2xl p-0 gap-0">
             {/* Bouton de fermeture unique dans l'en-tête */}
-            <div className="relative bg-gradient-to-r from-[#0A2240] to-[#0d2d52] px-4 py-3">
+            <div className="relative bg-[#18181B] border-b border-[#27272A] px-4 py-3">
               <button
                 type="button"
                 onClick={() => setDetailRequest(null)}
@@ -653,7 +653,7 @@ export function RequestsPage() {
                 <X className="w-3.5 h-3.5 text-white" />
               </button>
               <div className="pr-8">
-                <p className="text-white/60 text-xs">Demande client</p>
+                <p className="text-zinc-400 text-xs">Demande client</p>
                 <h2 className="text-lg font-bold text-white mt-0.5">{activeRequest.name}</h2>
                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
                   <Badge className={statusColors[activeRequest.status]}>
@@ -682,32 +682,32 @@ export function RequestsPage() {
                   icon: Briefcase,
                 },
               ].map((field) => (
-                <div key={field.label} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2">
-                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shrink-0 shadow-sm">
-                    <field.icon className="w-3.5 h-3.5 text-[#FF6600]" />
+                <div key={field.label} className="flex items-center gap-3 rounded-lg bg-[#18181B] border border-[#27272A] px-3 py-2">
+                  <div className="w-8 h-8 rounded-lg bg-[#121212] border border-[#27272A] flex items-center justify-center shrink-0 shadow-sm">
+                    <field.icon className="w-3.5 h-3.5 text-[#C27D3D]" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] text-gray-400 uppercase tracking-wide">{field.label}</p>
-                    <p className="text-sm font-medium text-[#0A2240] break-words">{field.value}</p>
+                    <p className="text-[10px] text-zinc-400 uppercase tracking-wide">{field.label}</p>
+                    <p className="text-sm font-medium text-white break-words">{field.value}</p>
                   </div>
                 </div>
               ))}
-              <div className="rounded-lg bg-gray-50 px-3 py-2">
+              <div className="rounded-lg bg-[#18181B] border border-[#27272A] px-3 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <FileText className="w-3.5 h-3.5 text-[#FF6600]" />
-                  <p className="text-[10px] text-gray-400 uppercase tracking-wide">Description</p>
+                  <FileText className="w-3.5 h-3.5 text-[#C27D3D]" />
+                  <p className="text-[10px] text-zinc-400 uppercase tracking-wide">Description</p>
                 </div>
-                <p className="text-sm text-[#0A2240] leading-relaxed">{activeRequest.description}</p>
+                <p className="text-sm text-zinc-200 leading-relaxed">{activeRequest.description}</p>
                 {activeRequest.photo_url && (
                   <div className="mt-2">
-                    <p className="text-[10px] text-gray-400 uppercase tracking-wide">Photo jointe</p>
+                    <p className="text-[10px] text-zinc-400 uppercase tracking-wide">Photo jointe</p>
                     <button
                       type="button"
                       onClick={() => {
                         setImageModalUrl(activeRequest.photo_url ?? null);
                         setImageModalOpen(true);
                       }}
-                      className="inline-block rounded-lg overflow-hidden border transition-transform duration-200 hover:scale-105 mt-1"
+                      className="inline-block rounded-lg overflow-hidden border border-[#27272A] transition-transform duration-200 hover:scale-105 mt-1"
                     >
                       <img src={activeRequest.photo_url} alt="Demande" className="max-h-48 w-auto block" />
                     </button>
@@ -716,26 +716,26 @@ export function RequestsPage() {
               </div>
 
               {requestAdjustments.length > 0 && (
-                <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-2">Modifications de prix</p>
+                <div className="rounded-lg border border-[#C27D3D]/30 bg-[rgba(194,125,61,0.1)] px-3 py-2">
+                  <p className="text-[10px] text-[#D99A5B] uppercase tracking-wide mb-2">Modifications de prix</p>
                   {requestAdjustments.map((adj) => (
-                    <div key={adj.id} className="rounded-lg bg-white p-2 border border-amber-100 mb-2 last:mb-0">
+                    <div key={adj.id} className="rounded-lg bg-[#18181B] p-2 border border-[#27272A] mb-2 last:mb-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-xs font-medium text-[#0A2240]">{adj.status === 'pending' ? 'En attente' : adj.status === 'approved' ? 'Accepté' : 'Refusé'}</span>
-                        <span className="text-[10px] text-gray-500">{format(new Date(adj.created_at), 'dd MMM yyyy', { locale: fr })}</span>
+                        <span className="text-xs font-medium text-white">{adj.status === 'pending' ? 'En attente' : adj.status === 'approved' ? 'Accepté' : 'Refusé'}</span>
+                        <span className="text-[10px] text-zinc-400">{format(new Date(adj.created_at), 'dd MMM yyyy', { locale: fr })}</span>
                       </div>
-                      <p className="text-xs text-gray-600">Ancien prix : {Number(adj.previous_price).toLocaleString('fr-FR')} FCFA</p>
-                      <p className="text-xs text-gray-600">Supplément : {Number(adj.extra_price).toLocaleString('fr-FR')} FCFA</p>
-                      <p className="text-xs text-gray-600">Nouveau total : {Number(adj.new_total).toLocaleString('fr-FR')} FCFA</p>
-                      {adj.reason && <p className="text-xs text-gray-500 mt-1">Motif : {adj.reason}</p>}
+                      <p className="text-xs text-zinc-300">Ancien prix : {Number(adj.previous_price).toLocaleString('fr-FR')} FCFA</p>
+                      <p className="text-xs text-zinc-300">Supplément : {Number(adj.extra_price).toLocaleString('fr-FR')} FCFA</p>
+                      <p className="text-xs text-zinc-300">Nouveau total : {Number(adj.new_total).toLocaleString('fr-FR')} FCFA</p>
+                      {adj.reason && <p className="text-xs text-zinc-400 mt-1">Motif : {adj.reason}</p>}
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="p-4 pt-0 border-t border-gray-200 bg-gray-50 space-y-2 rounded-b-2xl">
-              <p className="text-sm font-semibold text-[#0A2240] pt-3">Modifier la demande</p>
+            <div className="p-4 pt-0 border-t border-[#27272A] bg-[#18181B] space-y-2 rounded-b-2xl">
+              <p className="text-sm font-semibold text-white pt-3">Modifier la demande</p>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Statut</label>
                 <SearchableSelect

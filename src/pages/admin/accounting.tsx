@@ -312,8 +312,8 @@ export function AccountingPage() {
               className={cn(
                 'rounded-full px-4 py-1.5 text-sm font-medium transition-colors',
                 periodMode === mode.value
-                  ? 'bg-[#0A2240] text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#C27D3D] text-black font-semibold shadow-sm'
+                  : 'bg-[#18181B] text-zinc-300 hover:text-white border border-[#27272A]'
               )}
             >
               {mode.label}
@@ -408,41 +408,41 @@ export function AccountingPage() {
         <AdminCard className="border-[#FF6600]/20 bg-gradient-to-r from-[#FF6600]/5 to-transparent">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-[#FF6600]">
+              <p className="text-xs font-medium uppercase tracking-wide text-[#D99A5B]">
                 Statistiques globales
               </p>
-              <h3 className="text-lg font-bold text-[#0A2240] mt-1">{selectedWorker.name}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="text-lg font-bold text-white mt-1">{selectedWorker.name}</h3>
+              <p className="text-sm text-zinc-400">
                 Depuis sa présence sur la plateforme
               </p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
               <div>
-                <p className="text-[10px] text-gray-400 uppercase">Total reçu</p>
-                <p className="text-sm font-bold text-[#0A2240]">
+                <p className="text-[10px] text-zinc-400 uppercase">Total reçu</p>
+                <p className="text-sm font-bold text-white">
                   {formatFcfa(workerLifetime.totalReceived)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 uppercase">Total payé</p>
-                <p className="text-sm font-bold text-[#0A2240]">
+                <p className="text-[10px] text-zinc-400 uppercase">Total payé</p>
+                <p className="text-sm font-bold text-white">
                   {formatFcfa(workerLifetime.totalPaid)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 uppercase">Bénéfice</p>
+                <p className="text-[10px] text-zinc-400 uppercase">Bénéfice</p>
                 <p
                   className={cn(
                     'text-sm font-bold',
-                    workerLifetime.profit >= 0 ? 'text-emerald-600' : 'text-red-600'
+                    workerLifetime.profit >= 0 ? 'text-[#34D399]' : 'text-[#FB7185]'
                   )}
                 >
                   {formatFcfa(workerLifetime.profit)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 uppercase">Pointages</p>
-                <p className="text-sm font-bold text-[#0A2240]">{workerLifetime.count}</p>
+                <p className="text-[10px] text-zinc-400 uppercase">Pointages</p>
+                <p className="text-sm font-bold text-white">{workerLifetime.count}</p>
               </div>
             </div>
           </div>
@@ -450,8 +450,8 @@ export function AccountingPage() {
       )}
 
       <AdminCard padding={false} className="overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-[#0A2240]">Pointages (auto + manuels)</h2>
+        <div className="px-5 py-4 border-b border-[#27272A]">
+          <h2 className="font-semibold text-white">Pointages (auto + manuels)</h2>
           <p className="text-sm text-gray-400 mt-0.5">
             À la fin d'une mission, un pointage est créé automatiquement. Bénéfice = 0 jusqu'au
             prélèvement.
@@ -483,10 +483,10 @@ export function AccountingPage() {
                   const hasLevy = Number(record.levy_amount || 0) > 0;
                   return (
                     <TableRow key={record.id} className="hover:bg-gray-50/50">
-                      <TableCell className="text-sm whitespace-nowrap">
+                      <TableCell className="text-sm whitespace-nowrap text-zinc-400">
                         {format(new Date(record.date), 'dd MMM yyyy', { locale: fr })}
                       </TableCell>
-                      <TableCell className="text-sm font-medium text-[#0A2240]">
+                      <TableCell className="text-sm font-medium text-white">
                         <div className="flex items-center gap-2">
                           {record.workers?.photo_url ? (
                             <img
@@ -613,7 +613,7 @@ export function AccountingPage() {
                 </p>
               </div>
               <Button
-                className="w-full rounded-xl bg-[#0A2240] hover:bg-[#0d2d52]"
+                className="w-full rounded-xl bg-[#C27D3D] hover:bg-[#D99A5B] text-black font-semibold"
                 disabled={applyLevy.isPending}
                 onClick={async () => {
                   const levy = parseFloat(levyAmount);

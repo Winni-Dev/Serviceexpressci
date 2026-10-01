@@ -382,8 +382,8 @@ export function ZonesPage() {
                     <MapPin className="w-5 h-5 text-[#FF6600]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0A2240]">{zone.name}</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <h3 className="font-semibold text-white">{zone.name}</h3>
+                    <p className="text-xs text-zinc-400 mt-0.5">
                       Créée le {new Date(zone.created_at).toLocaleDateString('fr-FR')}
                     </p>
                   </div>

@@ -65,20 +65,20 @@ export function UserSpaceLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f6f9] pb-20 lg:pb-0">
-      <header className="sticky top-0 z-40 bg-[#0A2240] text-white border-b border-white/10">
+    <div className="min-h-screen bg-[#000000] pb-20 lg:pb-0 text-white">
+      <header className="sticky top-0 z-40 bg-[#0A0A0A] text-white border-b border-[#2D2D2D]">
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <BrandLogo to="/" showText={false} size="sm" />
           <div className="min-w-0 flex-1 px-2">
-            <p className="text-xs text-white/50 truncate">Mon espace</p>
-            <p className="text-sm font-medium truncate">
+            <p className="text-xs text-[#A0A0A0] truncate">Mon espace</p>
+            <p className="text-sm font-medium truncate text-white">
               {profile?.name || profile?.phone || 'Compte'}
             </p>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
             <Button
               size="sm"
-              className="rounded-xl bg-[#FF6600] hover:bg-[#e55a00] h-9 px-2.5 sm:px-3 text-xs sm:text-sm"
+              className="h-9 px-2.5 sm:px-3 text-xs sm:text-sm"
               asChild
             >
               <Link to="/">
@@ -90,7 +90,7 @@ export function UserSpaceLayout() {
             <Button
               size="sm"
               variant="ghost"
-              className="text-white/80 hover:text-white hover:bg-white/10 rounded-xl h-9 w-9 p-0"
+              className="text-white/80 hover:text-white hover:bg-white/5 rounded-xl h-9 w-9 p-0"
               onClick={logout}
               title="Déconnexion"
             >
@@ -101,7 +101,7 @@ export function UserSpaceLayout() {
       </header>
 
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 grid lg:grid-cols-[220px_1fr] gap-5">
-        <aside className="hidden lg:block bg-white rounded-2xl border border-gray-100 p-3 h-fit sticky top-20">
+        <aside className="hidden lg:block bg-[#141414] rounded-2xl border border-[#2D2D2D] p-3 h-fit sticky top-20 shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
           <nav className="space-y-1">
             {links.map((item) => (
               <NavLink
@@ -109,10 +109,9 @@ export function UserSpaceLayout() {
                 to={item.to}
                 end={item.to === '/espace' || item.to === '/partenaire' || item.to === '/travailleur'}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-[#FF6600]/10 text-[#FF6600]'
-                      : 'text-gray-600 hover:bg-gray-50'
+                  `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive
+                    ? 'bg-[#C27D3D]/10 text-[#FEC18A] border border-[#C27D3D]/20'
+                    : 'text-[#F5F5F5]/70 hover:bg-white/5 hover:text-white'
                   }`
                 }
               >
@@ -122,7 +121,7 @@ export function UserSpaceLayout() {
             ))}
             <Link
               to="/"
-              className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#FF6600] bg-[#FF6600]/5 hover:bg-[#FF6600]/10"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#FEC18A] bg-[#C27D3D]/10 hover:bg-[#C27D3D]/15 border border-[#C27D3D]/15"
             >
               <Home className="w-4 h-4" />
               Retour au site
@@ -135,7 +134,7 @@ export function UserSpaceLayout() {
         </main>
       </div>
 
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur-xl">
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-[#2D2D2D] bg-[#141414]/95 backdrop-blur-xl">
         <div className="grid grid-cols-5 gap-0.5 px-1 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           {links.slice(0, 4).map((item) => (
             <NavLink
@@ -143,8 +142,7 @@ export function UserSpaceLayout() {
               to={item.to}
               end={item.to === '/espace' || item.to === '/partenaire' || item.to === '/travailleur'}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-[#FF6600] bg-[#FF6600]/10' : 'text-gray-500'
+                `flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-[10px] font-medium transition-colors ${isActive ? 'text-[#FEC18A] bg-[#C27D3D]/10' : 'text-[#A0A0A0]'
                 }`
               }
             >
@@ -154,7 +152,7 @@ export function UserSpaceLayout() {
           ))}
           <Link
             to="/"
-            className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-[10px] font-semibold text-[#FF6600]"
+            className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-[10px] font-semibold text-[#FEC18A]"
           >
             <Home className="w-5 h-5" />
             <span>Site</span>

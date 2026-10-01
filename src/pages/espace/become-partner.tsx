@@ -96,8 +96,8 @@ export function BecomePartnerPage() {
 
   if (profile?.role === 'partner' || profile?.role === 'zone_manager') {
     return (
-      <div className="bg-white rounded-2xl p-8 text-center border">
-        <p className="text-[#0A2240] font-medium">Vous êtes déjà partenaire.</p>
+      <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-8 text-center shadow-[0_16px_32px_rgba(0,0,0,0.22)]">
+        <p className="font-medium text-white">Vous êtes déjà partenaire.</p>
         <Button className="mt-4 rounded-xl" onClick={() => navigate('/partenaire')}>
           Aller au tableau de bord
         </Button>
@@ -115,9 +115,9 @@ export function BecomePartnerPage() {
 
   if (existing?.status === 'pending') {
     return (
-      <div className="bg-white rounded-2xl p-8 border text-center">
-        <h1 className="text-xl font-bold text-[#0A2240]">Demande en cours</h1>
-        <p className="text-gray-500 mt-2">
+      <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-8 text-center shadow-[0_16px_32px_rgba(0,0,0,0.22)]">
+        <h1 className="text-xl font-bold text-white">Demande en cours</h1>
+        <p className="mt-2 text-[#A0A0A0]">
           Votre demande de partenariat a bien été envoyée. Nous vous notifierons après examen.
         </p>
       </div>
@@ -164,15 +164,15 @@ export function BecomePartnerPage() {
   return (
     <div className="max-w-2xl space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-[#0A2240]">Devenir partenaire</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Devenir partenaire</h1>
+        <p className="text-sm text-[#A0A0A0]">
           Remplissez ce formulaire pour prouver votre crédibilité. Une pièce d'identité (recto/verso) est requise.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4"
+        className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 space-y-4 shadow-[0_16px_32px_rgba(0,0,0,0.2)]"
       >
         <div className="grid sm:grid-cols-2 gap-4">
           <div>

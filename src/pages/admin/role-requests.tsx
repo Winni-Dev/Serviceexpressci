@@ -96,22 +96,22 @@ export function RoleRequestsPage() {
 
       <div className="space-y-4">
         {(data as PartnerApplication[] | undefined)?.map((app) => (
-          <div key={app.id} className="bg-white rounded-2xl border p-5 space-y-3">
+          <div key={app.id} className="bg-[#121212] rounded-xl sm:rounded-2xl border border-[#27272A] p-4 sm:p-5 space-y-3">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="font-semibold text-[#0A2240] text-lg">{app.name}</p>
-                <p className="text-sm text-gray-500">{app.phone}</p>
+                <p className="font-semibold text-white text-base sm:text-lg">{app.name}</p>
+                <p className="text-xs sm:text-sm text-zinc-400">{app.phone}</p>
               </div>
               <Badge
                 className={
                   app.status === 'pending'
-                    ? 'bg-amber-100 text-amber-800'
+                    ? 'border-[#C27D3D]/30 bg-[rgba(194,125,61,0.15)] text-[#D99A5B]'
                     : app.status === 'approved'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-red-100 text-red-700'
+                      ? 'border-[#34D399]/30 bg-[#34D399]/15 text-[#34D399]'
+                      : 'border-[#FB7185]/30 bg-[#FB7185]/15 text-[#FB7185]'
                 }
               >
-                {app.status}
+                {app.status === 'pending' ? 'En attente' : app.status === 'approved' ? 'Approuvé' : 'Rejeté'}
               </Badge>
             </div>
 

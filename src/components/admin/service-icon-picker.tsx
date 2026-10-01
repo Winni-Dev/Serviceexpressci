@@ -43,22 +43,22 @@ export function ServiceIconPicker({ value, onChange }: ServiceIconPickerProps) {
           <p className="text-[10px] font-medium uppercase tracking-wide text-gray-400">
             Icône sélectionnée
           </p>
-          <p className="truncate text-sm font-semibold text-[#0A2240]">
+          <p className="truncate text-sm font-semibold text-white">
             {selectedEntry?.label ?? value}
           </p>
           {selectedEntry && (
-            <p className="text-xs text-gray-400">{selectedEntry.category}</p>
+            <p className="text-xs text-zinc-400">{selectedEntry.category}</p>
           )}
         </div>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher une icône..."
-          className="rounded-xl border-gray-200 pl-9"
+          className="rounded-xl border-[#27272A] bg-[#18181B] text-white pl-9"
         />
       </div>
 
@@ -69,8 +69,8 @@ export function ServiceIconPicker({ value, onChange }: ServiceIconPickerProps) {
           className={cn(
             'shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors',
             category === 'all'
-              ? 'bg-[#0A2240] text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-[#C27D3D] text-black font-semibold'
+              : 'bg-[#18181B] text-zinc-300 border border-[#27272A] hover:text-white'
           )}
         >
           Toutes
@@ -83,8 +83,8 @@ export function ServiceIconPicker({ value, onChange }: ServiceIconPickerProps) {
             className={cn(
               'shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors',
               category === cat
-                ? 'bg-[#0A2240] text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-[#C27D3D] text-black font-semibold'
+                : 'bg-[#18181B] text-zinc-300 border border-[#27272A] hover:text-white'
             )}
           >
             {cat}
@@ -92,9 +92,9 @@ export function ServiceIconPicker({ value, onChange }: ServiceIconPickerProps) {
         ))}
       </div>
 
-      <div className="max-h-52 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50/50 p-2">
+      <div className="max-h-52 overflow-y-auto rounded-xl border border-[#27272A] bg-[#18181B] p-2">
         {filteredIcons.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-400">Aucune icône trouvée</p>
+          <p className="py-8 text-center text-sm text-zinc-400">Aucune icône trouvée</p>
         ) : (
           <div className="grid grid-cols-5 gap-1.5 sm:grid-cols-6">
             {filteredIcons.map((icon) => {
@@ -107,21 +107,21 @@ export function ServiceIconPicker({ value, onChange }: ServiceIconPickerProps) {
                   title={icon.label}
                   onClick={() => onChange(icon.key)}
                   className={cn(
-                    'group relative flex aspect-square flex-col items-center justify-center rounded-xl border-2 transition-all',
+                    'group relative flex aspect-square flex-col items-center justify-center rounded-xl border transition-all',
                     isSelected
-                      ? 'border-[#FF6600] bg-[#FF6600]/10 shadow-sm'
-                      : 'border-transparent bg-white hover:border-gray-200 hover:shadow-sm'
+                      ? 'border-[#C27D3D] bg-[rgba(194,125,61,0.15)] shadow-sm'
+                      : 'border-[#27272A] bg-[#121212] hover:border-[#C27D3D]/50 hover:shadow-sm'
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-5 w-5 transition-colors',
-                      isSelected ? 'text-[#FF6600]' : 'text-[#0A2240] group-hover:text-[#FF6600]'
+                      isSelected ? 'text-[#D99A5B]' : 'text-zinc-300 group-hover:text-[#D99A5B]'
                     )}
                   />
                   {isSelected && (
-                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF6600]">
-                      <Check className="h-2.5 w-2.5 text-white" />
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#C27D3D]">
+                      <Check className="h-2.5 w-2.5 text-black" />
                     </span>
                   )}
                 </button>
